@@ -1,148 +1,448 @@
+/**
+ * Hikaya Kids Library - Shopping Categories & Subcategories
+ * Inspired by Peekaboo Kenya's clean department organization.
+ * 
+ * CRITICAL REQUIREMENT: Every category and subcategory has its own unique, relevant image.
+ * Distinctive Hikaya Identity: Children's bookstore, educational supplies & gifts.
+ */
+
+export const getSubName = (sub) => (typeof sub === 'string' ? sub : sub?.name || '');
+export const getSubImage = (sub) => (typeof sub === 'string' ? '' : sub?.image || '');
+export const getSubAlt = (sub) => (typeof sub === 'string' ? sub : sub?.alt || sub?.name || '');
+export const getSubSlug = (sub) => (typeof sub === 'string' ? sub.toLowerCase().replace(/[^a-z0-9]+/g, '-') : sub?.slug || '');
+export const getSubDesc = (sub) => (typeof sub === 'string' ? '' : sub?.description || '');
+
 export const CATEGORIES = [
   {
-    id: "islamic-books",
-    name: "Islamic Books",
-    slug: "islamic-books",
-    arabic: "كتب إسلامية للأطفال",
+    id: "books-reading",
+    name: "Books & Reading",
+    slug: "books-reading",
+    arabic: "الكتب والقراءة",
     icon: "BookOpen",
-    emoji: "📖",
-    tagline: "Duas, Prophets & Noble Character",
-    description: "Inspiring children's Islamic books, Prophet stories, morning & evening duas, and noble character builders tailored for young hearts.",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-emerald-50",
-    accentColor: "text-emerald-800"
-  },
-  {
-    id: "quran-arabic-learning",
-    name: "Qur'an & Arabic Learning",
-    slug: "quran-arabic-learning",
-    arabic: "تعليم القرآن واللغة العربية",
-    icon: "Sparkles",
-    emoji: "🌙",
-    tagline: "Alphabet, Tajweed & Short Surahs",
-    description: "Step-by-step Qur'an workbooks, Arabic alphabet board books, word cards, and phonics readers that make Arabic learning joyful.",
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-amber-50",
-    accentColor: "text-amber-800"
-  },
-  {
-    id: "childrens-story-books",
-    name: "Children's Story Books",
-    slug: "childrens-story-books",
-    arabic: "قصص الأطفال الممتعة",
-    icon: "BookMarked",
     emoji: "📚",
-    tagline: "Adventures, Kindness & Wonder",
-    description: "Captivating storybooks and African adventures celebrating curiosity, kindness, sharing, and family love.",
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800",
+    tagline: "Storybooks, Islamic Literature & Early Readers",
+    description: "Engaging children's storybooks, Islamic literature, Arabic learning books, educational books, activity and colouring books, and reading accessories.",
+    image: "/images/categories/books-reading.jpg",
     bgColor: "bg-orange-50",
-    accentColor: "text-terracotta-700"
+    accentColor: "text-terracotta-700",
+    subcategories: [
+      {
+        name: "Children's Storybooks",
+        slug: "childrens-storybooks",
+        description: "Colourful illustrated children's storybooks full of adventure and imagination",
+        image: "/images/categories/sub-storybooks.jpg",
+        alt: "Colourful illustrated children's storybooks"
+      },
+      {
+        name: "Islamic Children's Books",
+        slug: "islamic-childrens-books",
+        description: "Children's Islamic learning books, Prophet stories and daily duas",
+        image: "/images/categories/sub-islamic-books.jpg",
+        alt: "Children's Islamic learning books and Prophet stories"
+      },
+      {
+        name: "Arabic Learning Books",
+        slug: "arabic-learning-books",
+        description: "Arabic alphabet and Huruf Al-Hijaa foundational reading books",
+        image: "/images/categories/sub-arabic-books.jpg",
+        alt: "Arabic alphabet and Huruf Al-Hijaa learning books"
+      },
+      {
+        name: "Educational Books",
+        slug: "educational-books",
+        description: "Children's educational books, phonics and primary workbooks",
+        image: "/images/categories/sub-educational-books.jpg",
+        alt: "Children's educational workbooks and phonics practice books"
+      },
+      {
+        name: "Activity & Colouring Books",
+        slug: "activity-colouring-books",
+        description: "Colouring, mazes, and creative activity books for growing minds",
+        image: "/images/categories/sub-colouring-books.jpg",
+        alt: "Child-friendly activity and colouring books"
+      },
+      {
+        name: "Reading Accessories",
+        slug: "reading-accessories",
+        description: "Bookmarks, book sleeves, reading pointers, and book journals",
+        image: "/images/categories/sub-reading-accessories.jpg",
+        alt: "Bookmarks, book sleeves, and reading journals"
+      }
+    ]
   },
   {
-    id: "activity-coloring-books",
-    name: "Activity & Coloring Books",
-    slug: "activity-coloring-books",
-    arabic: "كتب الأنشطة والتلوين",
+    id: "stationery",
+    name: "Stationery & Art Supplies",
+    slug: "stationery-art-supplies",
+    arabic: "الأدوات المدرسية ومستلزمات الرسم",
     icon: "Palette",
-    emoji: "🎨",
-    tagline: "Mazes, Tracing & Creative Fun",
-    description: "Hands-on activity workbooks, tear-out coloring sheets, mazes, and brain builders designed to boost focus and fine motor skills.",
-    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-sky-50",
-    accentColor: "text-sky-800"
+    emoji: "✏️",
+    tagline: "Exercise Books, Pencils, Cases & Creative Art",
+    description: "High quality school exercise books, ergonomic writing pencils, non-dust erasers, structured pencil cases, wax crayons, and craft materials.",
+    image: "/images/categories/stationery.jpg",
+    bgColor: "bg-blue-50",
+    accentColor: "text-blue-800",
+    subcategories: [
+      {
+        name: "Notebooks & Exercise Books",
+        slug: "notebooks-exercise-books",
+        description: "Neatly arranged school exercise books, ruled notebooks and journals",
+        image: "/images/categories/sub-notebooks.jpg",
+        alt: "Neatly arranged school notebooks and handwriting exercise books"
+      },
+      {
+        name: "Pens & Pencils",
+        slug: "pens-pencils",
+        description: "Ergonomic triangular pencils, smooth gel pens and handwriting aids",
+        image: "/images/categories/sub-pens-pencils.jpg",
+        alt: "Ergonomic writing pens, graphite pencils and coloured pens"
+      },
+      {
+        name: "Erasers & Sharpeners",
+        slug: "erasers-sharpeners",
+        description: "Dust-free colourful erasers, safety blade sharpeners and novelty shapes",
+        image: "/images/categories/sub-erasers-sharpeners.jpg",
+        alt: "Dust-free colourful erasers and pencil sharpeners"
+      },
+      {
+        name: "Pencil Cases",
+        slug: "pencil-cases",
+        description: "Cute and practical zippered pencil pouches and hardtop pencil boxes",
+        image: "/images/categories/sub-pencil-cases.jpg",
+        alt: "Cute and practical zippered pencil pouches"
+      },
+      {
+        name: "Crayons & Coloured Pencils",
+        slug: "crayons-coloured-pencils",
+        description: "Vibrant washable wax crayons and soft core coloured pencils",
+        image: "/images/categories/sub-crayons-pencils.jpg",
+        alt: "Vibrant non-toxic crayons and coloured pencils"
+      },
+      {
+        name: "Art & Craft Supplies",
+        slug: "art-craft-supplies",
+        description: "Child-friendly craft materials, safety scissors, glue sticks and paints",
+        image: "/images/categories/sub-art-craft.jpg",
+        alt: "Child-friendly craft materials, child scissors and glue"
+      },
+      {
+        name: "Stickers & Bookmarks",
+        slug: "stickers-bookmarks",
+        description: "Decorative praise stickers, planner markers and reading bookmarks",
+        image: "/images/categories/sub-stickers-bookmarks.jpg",
+        alt: "Decorative reward stickers and illustrated reading bookmarks"
+      }
+    ]
   },
   {
-    id: "learning-kits",
-    name: "Learning Kits",
-    slug: "learning-kits",
-    arabic: "حقائب وباقات التعلم",
-    icon: "PackageCheck",
-    emoji: "📦",
-    tagline: "Comprehensive Multi-Sensory Kits",
-    description: "All-in-one educational discovery kits complete with workbooks, tactile cards, manipulatives, and parent guides.",
-    image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-purple-50",
-    accentColor: "text-purple-800"
+    id: "school-bags",
+    name: "School Bags",
+    slug: "school-bags",
+    arabic: "الحقائب المدرسية",
+    icon: "Backpack",
+    emoji: "🎒",
+    tagline: "Backpacks, Book Bags & Pencil Pouches",
+    description: "Ergonomic, water-resistant primary backpacks, preschool bags, zippered pencil pouches, reinforced book bags, and library canvas totes.",
+    image: "/images/categories/school-bags.jpg",
+    bgColor: "bg-emerald-50",
+    accentColor: "text-emerald-800",
+    subcategories: [
+      {
+        name: "Preschool Backpacks",
+        slug: "preschool-backpacks",
+        description: "Small lightweight preschool backpacks designed for young shoulders",
+        image: "/images/categories/sub-preschool-backpacks.jpg",
+        alt: "Small lightweight preschool backpacks for young children"
+      },
+      {
+        name: "Primary School Bags",
+        slug: "primary-school-bags",
+        description: "Durable primary school backpacks with padded ergonomic support",
+        image: "/images/categories/sub-primary-bags.jpg",
+        alt: "Durable primary school backpacks with padded shoulder straps"
+      },
+      {
+        name: "Pencil Pouches",
+        slug: "pencil-pouches",
+        description: "Multi-compartment practical pencil cases and expandable organizers",
+        image: "/images/categories/sub-pencil-pouches.jpg",
+        alt: "Multi-compartment zippered pencil pouch for school supplies"
+      },
+      {
+        name: "Book Bags",
+        slug: "book-bags",
+        description: "Reinforced children's book bags with reflective safety accents",
+        image: "/images/categories/sub-book-bags.jpg",
+        alt: "Reinforced children's book bags with reflective safety trim"
+      },
+      {
+        name: "Tote Bags",
+        slug: "tote-bags",
+        description: "Reusable durable fabric library tote bags for books and activities",
+        image: "/images/categories/sub-tote-bags.jpg",
+        alt: "Reusable durable fabric library tote bags"
+      }
+    ]
   },
   {
-    id: "puzzles-educational-games",
-    name: "Puzzles & Educational Games",
-    slug: "puzzles-educational-games",
-    arabic: "ألعاب وألغاز تعليمية",
-    icon: "Puzzle",
-    emoji: "🧩",
-    tagline: "Spatial Reasoning & Family Games",
-    description: "Wooden floor puzzles, Arabic alphabet peg boards, and interactive matching games that make learning a collaborative joy.",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-teal-50",
-    accentColor: "text-teal-800"
-  },
-  {
-    id: "flashcards-learning-cards",
-    name: "Flashcards & Learning Cards",
-    slug: "flashcards-learning-cards",
-    arabic: "بطاقات تعليمية مصورة",
-    icon: "Layers",
-    emoji: "🎴",
-    tagline: "Bilingual Words, Duas & Numbers",
-    description: "Laminated wipe-clean flashcards for Arabic letters, daily duas, numbers, and social manners designed for rapid memory recall.",
-    image: "https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-yellow-50",
-    accentColor: "text-yellow-800"
+    id: "lunch-boxes-bottles",
+    name: "Lunch Boxes & Bottles",
+    slug: "lunch-boxes-bottles",
+    arabic: "علب الطعام وزجاجات الماء",
+    icon: "Utensils",
+    emoji: "🍱",
+    tagline: "Bento Boxes, Thermal Bags & Water Bottles",
+    description: "BPA-free stainless steel bento boxes, leakproof food containers, insulated lunch bags, reusable drinking bottles, and kid-safe tableware.",
+    image: "/images/categories/lunch-boxes-bottles.jpg",
+    bgColor: "bg-amber-50",
+    accentColor: "text-amber-800",
+    subcategories: [
+      {
+        name: "Lunch Boxes",
+        slug: "lunch-boxes",
+        description: "Divided stainless steel bento boxes with leakproof silicone seals",
+        image: "/images/categories/sub-lunch-boxes.jpg",
+        alt: "Divided stainless steel bento lunch boxes for kids"
+      },
+      {
+        name: "Food Containers",
+        slug: "food-containers",
+        description: "Airtight snack cups and reusable food storage containers",
+        image: "/images/categories/sub-food-containers.jpg",
+        alt: "Leakproof snack and food storage containers"
+      },
+      {
+        name: "Lunch Bags",
+        slug: "lunch-bags",
+        description: "Insulated thermal lunch bags with easy-clean wipeable lining",
+        image: "/images/categories/sub-lunch-bags.jpg",
+        alt: "Insulated thermal kids lunch bags"
+      },
+      {
+        name: "Water Bottles",
+        slug: "water-bottles",
+        description: "Reusable children's drinking bottles with spill-proof flip straws",
+        image: "/images/categories/sub-water-bottles.jpg",
+        alt: "BPA-free reusable children's water bottles with flip straw"
+      },
+      {
+        name: "Reusable Cups",
+        slug: "reusable-cups",
+        description: "Eco-friendly children's drinking cups, silicone tumblers and mugs",
+        image: "/images/categories/sub-reusable-cups.jpg",
+        alt: "Children's reusable drinking cups and tumblers"
+      },
+      {
+        name: "Bottle Accessories",
+        slug: "bottle-accessories",
+        description: "Bottle cleaning brushes, straw cleaners, handles and silicone boots",
+        image: "/images/categories/sub-bottle-accessories.jpg",
+        alt: "Bottle cleaning brushes, straw cleaners and silicone boot accessories"
+      }
+    ]
   },
   {
     id: "educational-toys",
     name: "Educational Toys",
     slug: "educational-toys",
-    arabic: "ألعاب خشبية هادفة",
-    icon: "Shapes",
-    emoji: "🧸",
-    tagline: "Wooden Blocks & Montessori Tools",
-    description: "Natural wooden building blocks, abacus counting sets, and shape sorters that foster tactile spatial problem solving.",
-    image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-rose-50",
-    accentColor: "text-rose-800"
+    arabic: "ألعاب تعليمية هادفة",
+    icon: "Puzzle",
+    emoji: "🧩",
+    tagline: "Puzzles, Wooden Blocks, STEM & Montessori",
+    description: "Alphabet & number learning toys, wooden puzzles, bilingual flashcards, building blocks, memory games, STEM sets, and Montessori materials.",
+    image: "/images/categories/educational-toys.jpg",
+    bgColor: "bg-teal-50",
+    accentColor: "text-teal-800",
+    subcategories: [
+      {
+        name: "Alphabet & Number Toys",
+        slug: "alphabet-number-toys",
+        description: "Wooden alphabet boards, abacus counting frames and numeral blocks",
+        image: "/images/categories/sub-alphabet-numbers.jpg",
+        alt: "Alphabet and counting wooden board learning materials"
+      },
+      {
+        name: "Puzzles",
+        slug: "puzzles",
+        description: "Age-appropriate educational jigsaw puzzles and wooden peg boards",
+        image: "/images/categories/sub-puzzles.jpg",
+        alt: "Age-appropriate educational jigsaw and wooden peg puzzles"
+      },
+      {
+        name: "Flashcards",
+        slug: "flashcards",
+        description: "Colourful double-sided learning flashcards for words and numbers",
+        image: "/images/categories/sub-flashcards.jpg",
+        alt: "Colourful double-sided learning flashcards for vocabulary"
+      },
+      {
+        name: "Building Blocks",
+        slug: "building-blocks",
+        description: "Natural hardwood blocks and architectural geometric shape sets",
+        image: "/images/categories/sub-building-blocks.jpg",
+        alt: "Children's natural wooden building blocks and shapes"
+      },
+      {
+        name: "Memory Games",
+        slug: "memory-games",
+        description: "Matching picture card games that develop focus and visual recall",
+        image: "/images/categories/sub-memory-games.jpg",
+        alt: "Interactive visual memory matching games for children"
+      },
+      {
+        name: "STEM Learning Toys",
+        slug: "stem-learning-toys",
+        description: "Hands-on science, technology, engineering and math exploration kits",
+        image: "/images/categories/sub-stem-toys.jpg",
+        alt: "STEM science, engineering and mechanics learning sets"
+      },
+      {
+        name: "Montessori-Inspired Learning Materials",
+        slug: "montessori-learning-materials",
+        description: "Self-correcting wooden sensory sorters and fine-motor activity toys",
+        image: "/images/categories/sub-montessori.jpg",
+        alt: "Practical hands-on Montessori wooden sensory sorting toys"
+      }
+    ]
   },
   {
-    id: "ramadan-eid",
-    name: "Ramadan & Eid",
-    slug: "ramadan-eid",
-    arabic: "رمضان والعيد للأطفال",
-    icon: "Moon",
-    emoji: "⭐",
-    tagline: "Countdown Charts, Crafts & Kits",
-    description: "Celebration craft packs, 30-day good deed journals, bunting garlands, and lunar trackers to make holy seasons unforgettable.",
-    image: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-indigo-50",
-    accentColor: "text-indigo-800"
-  },
-  {
-    id: "school-learning-essentials",
-    name: "School & Learning Essentials",
-    slug: "school-learning-essentials",
-    arabic: "مستلزمات مدرسية ودفاتر",
-    icon: "Backpack",
-    emoji: "🎒",
-    tagline: "Workbooks, Bags & Notebooks",
-    description: "Essential student writing copybooks, early math workbooks, school bags, and stationery designed for Kenyan classrooms.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-blue-50",
-    accentColor: "text-blue-800"
-  },
-  {
-    id: "gifts-for-kids",
-    name: "Gifts for Kids",
-    slug: "gifts-for-kids",
+    id: "gifts-accessories",
+    name: "Gifts & Accessories",
+    slug: "gifts-accessories",
     arabic: "هدايا وباقات مميزة",
     icon: "Gift",
     emoji: "🎁",
-    tagline: "Curated Boxes & Celebration Bundles",
-    description: "Thoughtfully packaged children's gift boxes, young reader sets, and festive celebration hampers ready for gifting.",
-    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800",
-    bgColor: "bg-amber-100",
-    accentColor: "text-amber-900"
+    tagline: "Hampers, Birthday Gifts, Eid Boxes & Awards",
+    description: "Curated children's gift sets, birthday bundles, Eid hampers, teacher appreciation gifts, gift bags, reading reward sets, and celebration cards.",
+    image: "/images/categories/gifts-accessories.jpg",
+    bgColor: "bg-purple-50",
+    accentColor: "text-purple-800",
+    subcategories: [
+      {
+        name: "Children's Gift Sets",
+        slug: "childrens-gift-sets",
+        description: "Beautifully curated gift hampers with storybooks and treasures",
+        image: "/images/categories/sub-gift-sets.jpg",
+        alt: "Curated children's book gift hamper and storybook bundle"
+      },
+      {
+        name: "Birthday Gifts",
+        slug: "birthday-gifts",
+        description: "Age-appropriate celebratory birthday presents with gift wrap",
+        image: "/images/categories/sub-birthday-gifts.jpg",
+        alt: "Age-appropriate children's birthday gift boxes with festive ribbons"
+      },
+      {
+        name: "Eid Gifts",
+        slug: "eid-gifts",
+        description: "Thoughtful Eid hampers, prayer kits, dates and Islamic rewards",
+        image: "/images/categories/sub-eid-gifts.jpg",
+        alt: "Thoughtful Eid gift sets, prayer mats, and Islamic activity kits"
+      },
+      {
+        name: "Teacher Gifts",
+        slug: "teacher-gifts",
+        description: "Teacher appreciation sets, thank you stationery and desk planners",
+        image: "/images/categories/sub-teacher-gifts.jpg",
+        alt: "Teacher appreciation gifts, appreciation notes, and stationery sets"
+      },
+      {
+        name: "Gift Bags & Wrapping",
+        slug: "gift-bags-wrapping",
+        description: "Festive children's gift bags, craft wrapping paper and satin ribbons",
+        image: "/images/categories/sub-wrapping.jpg",
+        alt: "Festive children's gift bags, patterned tissue, and gift wrapping ribbon"
+      },
+      {
+        name: "Reading Reward Sets",
+        slug: "reading-reward-sets",
+        description: "Reading achievement medals, star certificates and reward stickers",
+        image: "/images/categories/sub-reading-rewards.jpg",
+        alt: "Reading achievement reward sets, medals, stickers, and certificates"
+      },
+      {
+        name: "Greeting Cards",
+        slug: "greeting-cards",
+        description: "Attractive illustrated greeting cards for birthdays, Eid and milestones",
+        image: "/images/categories/sub-greeting-cards.jpg",
+        alt: "Charming artistic greeting cards for birthdays, Eid, and celebrations"
+      }
+    ]
+  },
+  {
+    id: "islamic-learning",
+    name: "Islamic & Arabic Learning",
+    slug: "islamic-learning",
+    arabic: "التعليم الإسلامي واللغة العربية",
+    icon: "Compass",
+    emoji: "🌙",
+    tagline: "Quran Stories, Arabic Alphabets & Islamic Values",
+    description: "Authentic Islamic children's storybooks, Arabic alphabet learning blocks, daily Dua flashcards, Seerah guides, and Ramadan deed kits.",
+    image: "/images/categories/islamic-learning.jpg",
+    bgColor: "bg-emerald-50",
+    accentColor: "text-forest-800",
+    subcategories: [
+      {
+        name: "Arabic Alphabet & First Words",
+        slug: "arabic-alphabet-first-words",
+        description: "Arabic alphabet wooden learning boards and tactile letter blocks",
+        image: "/images/categories/sub-arabic-alphabet.jpg",
+        alt: "Arabic alphabet wooden learning boards and letter blocks"
+      },
+      {
+        name: "Quran Stories & Tafsir for Kids",
+        slug: "quran-stories-tafsir",
+        description: "Illustrated Quran stories and Tafsir written gently for young hearts",
+        image: "/images/categories/sub-quran-stories.jpg",
+        alt: "Illustrated Quran stories and Tafsir for children"
+      },
+      {
+        name: "Daily Duas & Hadith Cards",
+        slug: "daily-duas-hadith-cards",
+        description: "Daily supplication memory cards with Arabic text and English meanings",
+        image: "/images/categories/sub-daily-duas.jpg",
+        alt: "Daily Duas and Hadith memory cards with Arabic and English"
+      },
+      {
+        name: "Islamic Manners & Character Books",
+        slug: "islamic-manners-character",
+        description: "Inspiring character, kindness, gratitude and Akhlaq storybooks",
+        image: "/images/categories/sub-islamic-manners.jpg",
+        alt: "Islamic character, manners, and Akhlaq storybooks for kids"
+      },
+      {
+        name: "Ramadan & Eid Learning Kits",
+        slug: "ramadan-eid-learning-kits",
+        description: "Ramadan deed calendar trackers and festive Eid family activity kits",
+        image: "/images/categories/sub-ramadan-kits.jpg",
+        alt: "Ramadan deed calendar, tracker, and Eid learning activity kits"
+      },
+      {
+        name: "Prayer & Wudu Practice Guides",
+        slug: "prayer-wudu-guides",
+        description: "Step-by-step visual guides and flashcards for Salah and Wudu",
+        image: "/images/categories/sub-prayer-guides.jpg",
+        alt: "Step-by-step visual Salah prayer and Wudu practice guides"
+      }
+    ]
   }
 ];
+
+// Mapping for backward-compatibility with category slugs
+export const CATEGORY_ALIASES = {
+  'books': 'books-reading',
+  'books-reading': 'books-reading',
+  'stationery': 'stationery',
+  'stationery-art-supplies': 'stationery',
+  'school-bags': 'school-bags',
+  'lunch-boxes-bottles': 'lunch-boxes-bottles',
+  'lunch-boxes': 'lunch-boxes-bottles',
+  'educational-toys': 'educational-toys',
+  'toys': 'educational-toys',
+  'gifts-accessories': 'gifts-accessories',
+  'gifts': 'gifts-accessories',
+  'islamic-learning': 'islamic-learning'
+};
 
 export const AGE_GROUPS = [
   {
@@ -203,12 +503,13 @@ export const AGE_GROUPS = [
 ];
 
 export function getCategoryById(id) {
-  return CATEGORIES.find(c => c.id === id) || null;
+  if (!id) return null;
+  const canonicalId = CATEGORY_ALIASES[id] || id;
+  return CATEGORIES.find(c => c.id === canonicalId || c.slug === canonicalId || c.id === id) || null;
 }
 
 export function getAgeGroupById(id) {
   if (!id) return null;
-  // Normalize legacy keys
   if (id === '0-3') return AGE_GROUPS.find(a => a.id === '0-2');
   if (id === '5-7') return AGE_GROUPS.find(a => a.id === '6-8');
   if (id === '7-10' || id === '10-12') return AGE_GROUPS.find(a => a.id === '9-12');
@@ -216,9 +517,143 @@ export function getAgeGroupById(id) {
 }
 
 /**
+ * Filter products for a category, supporting both direct category assignment
+ * and the specialized Islamic & Arabic Learning cross-cutting department.
+ */
+export function getProductsForCategory(products, categoryId) {
+  if (!categoryId) return products || [];
+  const targetId = CATEGORY_ALIASES[categoryId] || categoryId;
+
+  return (products || []).filter(p => {
+    if (targetId === 'islamic-learning') {
+      const isDirect = p.category === 'islamic-learning';
+      const isIslamicBook = p.category === 'books-reading' && (
+        p.name.toLowerCase().includes('dua') ||
+        p.name.toLowerCase().includes('prophet') ||
+        p.name.toLowerCase().includes('seerah') ||
+        p.name.toLowerCase().includes('qur') ||
+        p.name.toLowerCase().includes('arabic') ||
+        p.name.toLowerCase().includes('allah') ||
+        p.name.toLowerCase().includes('ramadan') ||
+        p.name.toLowerCase().includes('tajweed') ||
+        p.name.toLowerCase().includes('islamic') ||
+        (p.arabicTitle && p.arabicTitle.length > 0)
+      );
+      const isIslamicToy = p.category === 'educational-toys' && (
+        p.name.toLowerCase().includes('arabic') ||
+        p.name.toLowerCase().includes('masjid') ||
+        p.name.toLowerCase().includes('prophet') ||
+        p.name.toLowerCase().includes('dua') ||
+        p.name.toLowerCase().includes('ramadan') ||
+        p.name.toLowerCase().includes('qur') ||
+        p.name.toLowerCase().includes('muslim')
+      );
+      const isIslamicGift = p.category === 'gifts-accessories' && (
+        p.name.toLowerCase().includes('eid') ||
+        p.name.toLowerCase().includes('ramadan') ||
+        p.name.toLowerCase().includes('muslim')
+      );
+      return isDirect || isIslamicBook || isIslamicToy || isIslamicGift;
+    }
+
+    const itemCat = CATEGORY_ALIASES[p.category] || p.category;
+    return itemCat === targetId || p.category === categoryId;
+  });
+}
+
+/**
+ * Intelligent subcategory matching for Peekaboo-inspired departments.
+ * Accepts either a string subcategory name or a subcategory object.
+ */
+export function matchesSubcategory(product, subcategoryInput) {
+  if (!subcategoryInput || subcategoryInput === 'all') return true;
+  const targetName = getSubName(subcategoryInput);
+  const target = targetName.toLowerCase().trim();
+  const prodSub = (product.subcategory || product.subCategory || '').toLowerCase();
+  const prodName = (product.name || '').toLowerCase();
+  const prodDesc = (product.description || product.shortDescription || '').toLowerCase();
+  const fullText = `${prodName} ${prodSub} ${prodDesc}`;
+
+  // Direct match
+  if (prodSub.includes(target) || target.includes(prodSub)) {
+    return true;
+  }
+
+  // Canonical keyword definitions
+  const map = {
+    "children's storybooks": ['story', 'adventure', 'tale', 'savanna', 'wildlife', 'lantern', 'serengeti', 'friend'],
+    "islamic children's books": ['dua', 'prophet', 'seerah', 'allah', 'islamic', 'merciful', 'hearts', 'hadith'],
+    "arabic learning books": ['arabic', 'qur', 'tajweed', 'alphabet', 'tracing'],
+    "educational books": ['phonics', 'science', 'math', 'geography', 'workbook', 'words', 'reader'],
+    "activity and colouring books": ['coloring', 'colouring', 'activity', 'poster', 'mazes', 'puzzle'],
+    "activity & colouring books": ['coloring', 'colouring', 'activity', 'poster', 'mazes', 'puzzle'],
+    "reading accessories": ['pointer', 'bookmark', 'holder', 'magnifier', 'light', 'tote'],
+
+    "notebooks and exercise books": ['exercise', 'notebook', 'ruled', 'grid', 'handwriting'],
+    "notebooks & exercise books": ['exercise', 'notebook', 'ruled', 'grid', 'handwriting'],
+    "pens and pencils": ['pencil', 'pen', 'grip', 'writing'],
+    "pens & pencils": ['pencil', 'pen', 'grip', 'writing'],
+    "erasers and sharpeners": ['eraser', 'sharpener', 'non-dust'],
+    "erasers & sharpeners": ['eraser', 'sharpener', 'non-dust'],
+    "pencil cases": ['pencil case', 'hardtop', 'pouch'],
+    "crayons and coloured pencils": ['crayon', 'colored pencil', 'wax', 'pastel'],
+    "crayons & coloured pencils": ['crayon', 'colored pencil', 'wax', 'pastel'],
+    "art and craft supplies": ['caddy', 'ruler', 'geometry', 'craft', 'art'],
+    "art & craft supplies": ['caddy', 'ruler', 'geometry', 'craft', 'art'],
+    "stickers and bookmarks": ['stamp', 'planner', 'sticker', 'bookmark', 'praise'],
+    "stickers & bookmarks": ['stamp', 'planner', 'sticker', 'bookmark', 'praise'],
+
+    "preschool backpacks": ['junior', 'safari', 'lightweight', 'preschool', 'daypack'],
+    "primary school bags": ['ergonomic', 'primary', 'reflective', 'waterproof', 'drawstring', 'backpack'],
+    "pencil pouches": ['pouch', 'pencil', 'zipper', 'expandable'],
+    "book bags": ['book bag', 'drawstring', 'pe & activity', 'heavy-duty'],
+    "tote bags": ['tote', 'canvas', 'library', 'storybook'],
+
+    "lunch boxes": ['bento', 'lunch box', 'compartment', 'stainless'],
+    "food containers": ['snack', 'fruit', 'container', 'bamboo', 'plate', 'dining'],
+    "lunch bags": ['lunch bag', 'insulated', 'thermal'],
+    "water bottles": ['water bottle', 'double-wall', 'insulated', 'stainless'],
+    "reusable cups": ['cup', 'dining set', 'plate', 'bamboo'],
+    "bottle accessories": ['straw', 'cleaning', 'brush', 'tritan', 'easy-sip'],
+
+    "alphabet and number toys": ['alphabet', 'counting', 'number', 'pegs', 'blocks'],
+    "alphabet & number toys": ['alphabet', 'counting', 'number', 'pegs', 'blocks'],
+    "puzzles": ['puzzle', 'sorting', 'peg', 'masjid', 'floor'],
+    "flashcards": ['flashcard', 'cards', 'math cards', 'dua cards', 'arabic cards'],
+    "building blocks": ['building block', 'geometric block', 'wooden block', 'masjid block'],
+    "memory games": ['memory', 'matching', 'game', 'prophets game'],
+    "stem learning toys": ['stem', 'discovery', 'science', 'balance', 'scale'],
+    "montessori-inspired learning materials": ['montessori', 'chef', 'kitchen', 'sorter', 'stacking', 'wooden'],
+
+    "children's gift sets": ['gift box', 'gift set', 'gift bundle', 'explorer', 'art & story'],
+    "birthday gifts": ['gift bundle', 'young reader', 'scholar', 'box'],
+    "eid gifts": ['eid', 'ramadan', 'hamper', 'celebration'],
+    "teacher gifts": ['teacher', 'stamps', 'planner', 'appreciation'],
+    "gift bags and wrapping": ['wrapping', 'bag', 'keepsake', 'kit'],
+    "gift bags & wrapping": ['wrapping', 'bag', 'keepsake', 'kit'],
+    "reading reward sets": ['medal', 'trophy', 'champion', 'achievement'],
+    "greeting cards": ['greeting', 'cards', 'postcard', 'pack'],
+
+    "arabic alphabet & first words": ['alphabet', 'blocks', 'puzzle', 'tracing'],
+    "quran stories & tafsir for kids": ['prophet', 'seerah', 'stories', 'quran'],
+    "daily duas & hadith cards": ['dua', 'hadith', 'cards'],
+    "islamic manners & character books": ['manners', 'habits', 'merciful', 'character'],
+    "ramadan & eid learning kits": ['ramadan', 'calendar', 'deed', 'eid'],
+    "prayer & wudu practice guides": ['starter kit', 'prayer', 'wudu', 'workbook']
+  };
+
+  const keywords = map[target];
+  if (keywords) {
+    return keywords.some(k => fullText.includes(k));
+  }
+
+  // Fallback: search key words
+  const tokens = target.split(/[\s,&]+/).filter(t => t.length > 3);
+  return tokens.some(t => fullText.includes(t));
+}
+
+/**
  * Checks whether a product matches a target age group using numeric boundary intervals.
- * Formula: [productMin, productMax] overlaps with [bracketMin, bracketMax] <=>
- * productMin <= bracketMax && productMax >= bracketMin
  */
 export function matchesAgeGroup(product, ageGroupId) {
   if (!ageGroupId) return true;
@@ -230,7 +665,7 @@ export function matchesAgeGroup(product, ageGroupId) {
 
   if (pMin === undefined || pMax === undefined || pMin === null || pMax === null) {
     const range = product.ageRange || product.age_range || '';
-    if (range.includes('Teachers')) return false; // Teachers & educators supplies are not child-age specific
+    if (range.includes('Teachers')) return false;
     if (range === 'All Ages') {
       pMin = 3;
       pMax = 14;
@@ -253,4 +688,3 @@ export function matchesAgeGroup(product, ageGroupId) {
 
   return pMin <= bracket.maxAge && pMax >= bracket.minAge;
 }
-

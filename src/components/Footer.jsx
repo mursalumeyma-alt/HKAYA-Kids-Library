@@ -3,188 +3,311 @@ import { useStore } from '../context/StoreContext';
 import { STORE_CONFIG } from '../config/storeConfig';
 import HkayaLogo from './HkayaLogo';
 import {
-  MessageCircle,
+  Phone,
   Mail,
   MapPin,
-  Heart,
-  ShieldCheck,
-  Instagram,
-  Facebook,
-  ExternalLink
+  ChevronRight
 } from 'lucide-react';
+import { InstagramIcon, TikTokIcon } from './SocialIcons';
 
 export default function Footer() {
   const { navigateTo } = useStore();
 
+  const { email, phone } = STORE_CONFIG.contacts;
+  const { instagram, tiktok } = STORE_CONFIG.social;
+
   return (
-    <footer className="bg-sand-100 text-charcoal border-t border-sand-200/90 pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Columns Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-14 border-b border-sand-200">
-          {/* Column 1: Brand & Story */}
-          <div className="lg:col-span-2 space-y-4">
-            <HkayaLogo onClick={() => navigateTo('home')} />
+    <footer className="w-full text-white" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">Footer</h2>
+      
+      {/* Main Footer Section (Rich Terracotta #F97316) */}
+      <div className="bg-[#F97316] pt-12 pb-10 sm:pt-14 sm:pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+            
+            {/* Column 1: Hikaya Logo, Tagline & Direct Contact */}
+            <div className="space-y-4">
+              <HkayaLogo
+                variant="footer"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  navigateTo('home');
+                }}
+              />
 
-            <p className="text-xs sm:text-sm text-charcoal-muted leading-relaxed max-w-sm">
-              {STORE_CONFIG.brand.mission}
-            </p>
+              <p className="text-xs text-white/90 leading-relaxed">
+                {STORE_CONFIG.brand.tagline}
+              </p>
 
-            <div className="pt-2 text-xs text-charcoal-muted space-y-2">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-terracotta-600 shrink-0" />
-                <span>{STORE_CONFIG.brand.locationNotes}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-forest-700 shrink-0" />
-                <span>{STORE_CONFIG.contacts.email.address}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>
-                  {STORE_CONFIG.contacts.whatsapp.label}: {STORE_CONFIG.contacts.whatsapp.displayNumber}
-                </span>
-              </div>
-            </div>
-          </div>
+              <div className="space-y-2 pt-1 text-xs text-white/95">
+                <a
+                  href={`tel:${phone.rawNumber || '+254793477288'}`}
+                  className="flex items-center gap-2 hover:text-white/80 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-white/90 shrink-0" />
+                  <span>0793 477 288</span>
+                </a>
 
-          {/* Column 2: Shop Categories */}
-          <div>
-            <h4 className="font-bold text-sm text-forest-900 uppercase tracking-wider mb-4">
-              Shop Collections
-            </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-charcoal-muted">
-              <li>
-                <button
-                  onClick={() => navigateTo('shop', { category: 'books' })}
-                  className="hover:text-terracotta-700 transition-colors"
+                <a
+                  href={`mailto:${email.address || 'info@hikayakidslibrary.co.ke'}`}
+                  className="flex items-center gap-2 hover:text-white/80 transition-colors"
                 >
-                  Books & Stories
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('shop', { category: 'stationery' })}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Stationery & Journals
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('shop', { category: 'islamic' })}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Islamic Learning
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('shop', { category: 'toys' })}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Toys & Learning
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('shop', { category: 'gifts' })}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Curated Gift Sets
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('digital')}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Digital Resources
-                </button>
-              </li>
-            </ul>
-          </div>
+                  <Mail className="w-3.5 h-3.5 text-white/90 shrink-0" />
+                  <span>info@hikayakidslibrary.co.ke</span>
+                </a>
 
-          {/* Column 3: About Hkaya */}
-          <div>
-            <h4 className="font-bold text-sm text-forest-900 uppercase tracking-wider mb-4">
-              About Hkaya
-            </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-charcoal-muted">
-              <li>
-                <button
-                  onClick={() => navigateTo('about')}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Our Story & Mission
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('about')}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Why Hkaya
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('reading-corner')}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Reading Corner Blog
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateTo('about')}
-                  className="hover:text-terracotta-700 transition-colors"
-                >
-                  Children's Library Vision
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Customer Care */}
-          <div>
-            <h4 className="font-bold text-sm text-forest-900 uppercase tracking-wider mb-4">
-              Customer Care
-            </h4>
-            <div className="space-y-4 text-xs sm:text-sm">
-              <div>
-                <span className="text-forest-900 font-semibold block">
-                  Secure Payments
-                </span>
-                <p className="text-xs text-charcoal-muted mt-0.5">
-                  M-Pesa • Mobile Money • Visa • Mastercard
-                </p>
-              </div>
-              <div>
-                <span className="text-forest-900 font-semibold block">
-                  Shop With Confidence
-                </span>
-                <p className="text-xs text-charcoal-muted mt-0.5 leading-relaxed">
-                  Quality kids' books, secure checkout, and reliable delivery.
-                </p>
+                <div className="flex items-center gap-2 text-white/90">
+                  <MapPin className="w-3.5 h-3.5 text-white/90 shrink-0" />
+                  <span>Nairobi, Kenya</span>
+                </div>
               </div>
             </div>
+
+            {/* Column 2: Quick Links */}
+            <div>
+              <h3 className="font-bold text-sm tracking-wide mb-3 sm:mb-4 text-white">
+                Quick Links
+              </h3>
+              <ul className="space-y-2 text-xs text-white/90">
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('home');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[130px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Home</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('shop');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[130px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Shop</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('about');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[130px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>About Us</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('contact');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[130px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Contact Us</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('policies');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[130px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Policies</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Customer Service */}
+            <div>
+              <h3 className="font-bold text-sm tracking-wide mb-3 sm:mb-4 text-white">
+                Customer Service
+              </h3>
+              <ul className="space-y-2 text-xs text-white/90">
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('policies', { section: 'shipping' });
+                    }}
+                    className="flex items-center justify-between w-full max-w-[150px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Shipping Policy</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('policies', { section: 'returns' });
+                    }}
+                    className="flex items-center justify-between w-full max-w-[150px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Exchange Policy</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('policies', { section: 'payments' });
+                    }}
+                    className="flex items-center justify-between w-full max-w-[150px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Payment Options</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('contact');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[150px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>FAQs</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigateTo('contact');
+                    }}
+                    className="flex items-center justify-between w-full max-w-[150px] hover:text-white hover:translate-x-0.5 transition-all text-left"
+                  >
+                    <span>Support</span>
+                    <ChevronRight className="w-3 h-3 text-white/70" />
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Follow Us */}
+            <div>
+              <h3 className="font-bold text-sm tracking-wide mb-3 sm:mb-4 text-white">
+                Follow Us
+              </h3>
+              <p className="text-xs text-white/90 leading-relaxed mb-4">
+                Stay connected for updates, new arrivals and more!
+              </p>
+              
+              <div className="space-y-3 text-xs">
+                {instagram && instagram.url && (
+                  <a
+                    href={instagram.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-white/95 hover:text-white transition-colors group py-0.5"
+                    aria-label="Follow HKAYA Kids Library on Instagram (@hkaya_kids_library) - opens in a new tab"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/25 transition-colors">
+                      <InstagramIcon className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                    </div>
+                    <div className="leading-tight">
+                      <span className="font-semibold block text-xs">Instagram</span>
+                      <span className="text-[11px] text-white/80">{instagram.handle || '@hkaya_kids_library'}</span>
+                    </div>
+                  </a>
+                )}
+
+                {tiktok && tiktok.url && (
+                  <a
+                    href={tiktok.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-white/95 hover:text-white transition-colors group py-0.5"
+                    aria-label="Follow HKAYA Kids Library on TikTok (@hkaya_kids_library) - opens in a new tab"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/25 transition-colors">
+                      <TikTokIcon className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                    </div>
+                    <div className="leading-tight">
+                      <span className="font-semibold block text-xs">TikTok</span>
+                      <span className="text-[11px] text-white/80">{tiktok.handle || '@hkaya_kids_library'}</span>
+                    </div>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Column 5: Secure Payments */}
+            <div>
+              <h3 className="font-bold text-sm tracking-wide mb-3 sm:mb-4 text-white">
+                Secure Payments
+              </h3>
+              <p className="text-xs text-white/90 leading-relaxed mb-3.5">
+                We accept secure payment methods:
+              </p>
+
+              {/* 2x2 Payment Badge Grid */}
+              <div className="grid grid-cols-2 gap-2 max-w-[160px]">
+                {/* M-PESA */}
+                <div className="bg-white rounded-md p-1.5 flex items-center justify-center shadow-2xs h-7">
+                  <img
+                    src="/images/reference/payment-mpesa.png"
+                    alt="M-PESA"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+
+                {/* Pesapal */}
+                <div className="bg-white rounded-md p-1.5 flex items-center justify-center shadow-2xs h-7">
+                  <img
+                    src="/images/reference/payment-pesapal.png"
+                    alt="Pesapal"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+
+                {/* VISA */}
+                <div className="bg-white rounded-md p-1.5 flex items-center justify-center shadow-2xs h-7">
+                  <img
+                    src="/images/reference/payment-visa.png"
+                    alt="Visa"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+
+                {/* Mastercard */}
+                <div className="bg-white rounded-md p-1.5 flex items-center justify-center shadow-2xs h-7">
+                  <img
+                    src="/images/reference/payment-mastercard.png"
+                    alt="Mastercard"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+
           </div>
+
         </div>
+      </div>
 
-        {/* Bottom Bar: Copyright & Tagline */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-charcoal-muted">
-          <p>
-            © {STORE_CONFIG.brand.establishedYear} {STORE_CONFIG.brand.name}. All rights reserved.
-          </p>
-
-          <p className="flex items-center gap-1 text-forest-900 font-medium">
-            <span>{STORE_CONFIG.brand.tagline}</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-current inline" />
-          </p>
-
-          <p className="text-[11px] text-charcoal-muted/80">
-            Proudly serving families in Nairobi & across Kenya
-          </p>
+      {/* Sub-footer: Dark Terracotta Bar (#C2410C) */}
+      <div className="bg-[#C2410C] py-3.5 text-center text-xs text-white/90 font-normal">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p>© 2025 Hikaya Kids Library. All rights reserved.</p>
         </div>
       </div>
     </footer>

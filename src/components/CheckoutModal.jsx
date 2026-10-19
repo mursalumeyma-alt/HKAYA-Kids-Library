@@ -365,7 +365,7 @@ export default function CheckoutModal() {
                   <span>Delivery Fee (Kenya)</span>
                   <span>{deliveryFee === 0 ? 'FREE' : `KSh ${deliveryFee.toLocaleString()}`}</span>
                 </div>
-                <div className="flex justify-between font-extrabold text-sm text-forest-900 pt-1.5 border-t border-sand-200">
+                <div className="flex justify-between font-extrabold text-sm text-[#C2410C] pt-1.5 border-t border-sand-200">
                   <span>Estimated Total</span>
                   <span>KSh {grandTotal.toLocaleString()}</span>
                 </div>
@@ -389,6 +389,63 @@ export default function CheckoutModal() {
           {/* STEP 2: Payment Method */}
           {!isWaitingForMpesa && step === 2 && (
             <div className="space-y-5">
+              {/* Secure Payments Section */}
+              <div className="p-4 rounded-2xl bg-white border border-sand-200 shadow-2xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-[#F97316]" />
+                      <span>Secure Payments</span>
+                    </h4>
+                    <p className="text-xs text-charcoal-muted mt-0.5">
+                      We accept secure payment methods.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-full border border-emerald-200 shrink-0">
+                    Encrypted & Secure
+                  </span>
+                </div>
+
+                {/* Four Payment Logos in a neat, responsive row */}
+                <div className="grid grid-cols-4 gap-2 sm:gap-2.5 pt-1">
+                  {/* M-PESA */}
+                  <div className="bg-[#FFF9F1] rounded-xl p-2 border border-sand-200 flex items-center justify-center h-11 sm:h-12 shadow-2xs hover:border-[#F97316]/50 transition-all">
+                    <img
+                      src="/images/reference/payment-mpesa.png"
+                      alt="M-PESA"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+
+                  {/* Pesapal (Informational logo only) */}
+                  <div className="bg-[#FFF9F1] rounded-xl p-2 border border-sand-200 flex items-center justify-center h-11 sm:h-12 shadow-2xs hover:border-[#F97316]/50 transition-all">
+                    <img
+                      src="/images/reference/payment-pesapal.png"
+                      alt="Pesapal"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+
+                  {/* Visa */}
+                  <div className="bg-[#FFF9F1] rounded-xl p-2 border border-sand-200 flex items-center justify-center h-11 sm:h-12 shadow-2xs hover:border-[#F97316]/50 transition-all">
+                    <img
+                      src="/images/reference/payment-visa.png"
+                      alt="Visa"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+
+                  {/* Mastercard */}
+                  <div className="bg-[#FFF9F1] rounded-xl p-2 border border-sand-200 flex items-center justify-center h-11 sm:h-12 shadow-2xs hover:border-[#F97316]/50 transition-all">
+                    <img
+                      src="/images/reference/payment-mastercard.png"
+                      alt="Mastercard"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="p-3.5 rounded-2xl bg-cream-100 border border-sand-200 text-xs text-forest-900 flex items-start gap-2.5">
                 <Info className="w-4 h-4 text-terracotta-600 shrink-0 mt-0.5" />
                 <div>
@@ -399,9 +456,9 @@ export default function CheckoutModal() {
                 </div>
               </div>
 
-              {/* Payment Methods Options */}
+              {/* Payment Methods Options (Only M-PESA and Credit/Debit Card) */}
               <div className="space-y-2.5">
-                {/* M-Pesa Option */}
+                {/* 1. M-Pesa Option */}
                 <label
                   className={`p-4 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
                     formData.paymentMethod === 'mpesa'
@@ -433,7 +490,7 @@ export default function CheckoutModal() {
                   </div>
                 </label>
 
-                {/* Card Option */}
+                {/* 2. Credit / Debit Card Option */}
                 <label
                   className={`p-4 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
                     formData.paymentMethod === 'card'
@@ -572,7 +629,7 @@ export default function CheckoutModal() {
                   </ul>
                 </div>
 
-                <div className="border-t border-sand-200 pt-2 flex justify-between font-extrabold text-sm text-forest-900">
+                <div className="border-t border-sand-200 pt-2 flex justify-between font-extrabold text-sm text-[#C2410C]">
                   <span>Server-Calculated Total:</span>
                   <span>KSh {orderReceipt.order.total.toLocaleString()}</span>
                 </div>

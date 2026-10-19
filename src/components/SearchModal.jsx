@@ -63,22 +63,31 @@ export default function SearchModal() {
         {/* Search Input Bar */}
         <div className="p-4 sm:p-5 bg-white border-b border-sand-200 flex items-center gap-3">
           <Search className="w-5 h-5 text-terracotta-600 shrink-0" />
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search books, Islamic resources, toys, stationery..."
-            className="flex-1 bg-transparent text-sm sm:text-base font-semibold text-charcoal placeholder-charcoal-muted/60 focus:outline-none"
-          />
-          {query && (
-            <button
-              onClick={() => setQuery('')}
-              className="text-charcoal-muted hover:text-charcoal p-1 rounded"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (query.trim()) handleViewAllInShop();
+            }}
+            className="flex-1 flex items-center gap-2"
+          >
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search books, Islamic resources, toys, stationery..."
+              className="w-full bg-transparent text-sm sm:text-base font-semibold text-charcoal placeholder-charcoal-muted/60 focus:outline-none"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                className="text-charcoal-muted hover:text-charcoal p-1 rounded"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </form>
           <button
             onClick={() => setIsSearchOpen(false)}
             className="text-xs font-bold text-charcoal-muted hover:text-charcoal px-2.5 py-1 rounded-lg bg-sand-100 border border-sand-200"

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../context/StoreContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { STORE_CONFIG } from '../config/storeConfig';
 import { useAuth } from '../context/AuthContext';
+import { CATEGORIES } from '../data/categories';
 import HkayaLogo from './HkayaLogo';
 import {
   Search,
@@ -12,12 +13,11 @@ import {
   User,
   Menu,
   X,
-  Sparkles,
   ChevronDown,
-  ShieldCheck,
-  RotateCcw,
-  MessageCircle,
-  ShieldAlert
+  ShieldAlert,
+  Truck,
+  Phone,
+  Mail
 } from 'lucide-react';
 
 export default function Header() {
@@ -25,112 +25,84 @@ export default function Header() {
     currentView,
     navigateTo,
     setIsSearchOpen,
-    setIsAccountOpen,
-    setSelectedCategory
+    setIsAccountOpen
   } = useStore();
   const { itemCount, setIsCartOpen } = useCart();
   const { wishlistCount, setIsWishlistOpen } = useWishlist();
   const { user, isAdmin } = useAuth();
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [announcementIndex, setAnnouncementIndex] = useState(0);
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
+  const [headerSearch, setHeaderSearch] = useState('');
+  const dropdownTimeoutRef = useRef(null);
 
-  const announcements = [
-    { text: "Secure payments with M-Pesa • Mobile Money • Card", icon: ShieldCheck },
-    { text: "Quality kids' books, learning resources & educational toys", icon: Sparkles }
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAnnouncementIndex(prev => (prev + 1) % announcements.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [announcements.length]);
-
-  const navLinks = [
-    { label: 'Home', view: 'home' },
-    { label: 'Shop All', view: 'shop', category: null, ageGroup: null },
-    { label: 'Shop by Age', view: 'shop', isAgeMenu: true },
-    { label: 'Books', view: 'shop', category: 'islamic-books' },
-    { label: 'School Essentials', view: 'shop', category: 'school-learning-essentials' },
-    { label: 'Educational Toys', view: 'shop', category: 'educational-toys' },
-    { label: 'Gifts', view: 'shop', category: 'gifts-for-kids' },
-    { label: 'Reading Corner', view: 'reading-corner' }
-  ];
-
-  const handleNavClick = (link) => {
-    if (link.isAgeMenu) {
-      if (currentView === 'home') {
-        const el = document.getElementById('shop-by-age');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-          setMobileMenuOpen(false);
-          return;
-        }
-      }
-      navigateTo('shop', { ageGroup: '6-8' });
-    } else if (link.category !== undefined) {
-      navigateTo(link.view, { category: link.category, ageGroup: null });
-    } else {
-      navigateTo(link.view, { ageGroup: null, category: null });
+  const handleHeaderSearch = (e) => {
+    e.preventDefault();
+    if (headerSearch.trim()) {
+      navigateTo('shop', { searchQuery: headerSearch.trim(), category: null });
+      setHeaderSearch('');
     }
-    setMobileMenuOpen(false);
   };
 
-  const CurrentIcon = announcements[announcementIndex].icon;
+  const handleMouseEnterShop = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setShopDropdownOpen(true);
+  };
+
+  const handleMouseLeaveShop = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setShopDropdownOpen(false);
+    }, 200);
+  };
+
+  const handleCategoryClick = (catId) => {
+    setShopDropdownOpen(false);
+    setMobileMenuOpen(false);
+    navigateTo('shop', { category: catId });
+  };
 
   return (
-    <header className="w-full sticky top-0 z-40 transition-shadow">
-      {/* 1. Top Announcement Bar */}
-      <div className="bg-sand-100 border-b border-sand-200/80 text-charcoal-muted text-[11px] sm:text-xs py-1.5 px-4">
+    <header className="w-full sticky top-0 z-40 bg-white shadow-2xs">
+      {/* 1. Top Announcement Bar (Rich Orange / Terracotta) */}
+      <div className="bg-[#F97316] text-white text-[11px] sm:text-xs py-2 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Rotating Message */}
-          <div className="flex items-center gap-2 font-medium">
-            <CurrentIcon className="w-3.5 h-3.5 text-terracotta-600 animate-gentle-pulse" />
-            <span className="text-charcoal-light font-semibold">
-              {announcements[announcementIndex].text}
-            </span>
+          {/* Left: Fast Delivery */}
+          <div className="flex items-center gap-2 font-medium tracking-wide">
+            <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white shrink-0" />
+            <span>Fast Delivery Across East Africa</span>
           </div>
 
-          {/* Right Announcement Info */}
-          <div className="hidden md:flex items-center gap-4 text-charcoal-muted">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-forest-700" />
-              <span>Safe & Trusted</span>
-            </span>
-            <span className="text-sand-300">•</span>
-            <div className="flex items-center gap-1 text-terracotta-700">
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span title={STORE_CONFIG.contacts.whatsapp.displayNumber}>
-                {STORE_CONFIG.contacts.whatsapp.label}: {STORE_CONFIG.contacts.whatsapp.displayNumber}
-              </span>
-            </div>
+          {/* Right: Phone & Email */}
+          <div className="hidden sm:flex items-center gap-5 text-white/95 text-xs font-medium">
+            <a
+              href="tel:+254793477288"
+              className="flex items-center gap-1.5 hover:text-white transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>0793 477 288</span>
+            </a>
+            <span className="text-white/40">•</span>
+            <a
+              href="mailto:info@hikayakidslibrary.co.ke"
+              className="flex items-center gap-1.5 hover:text-white transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span>info@hikayakidslibrary.co.ke</span>
+            </a>
           </div>
         </div>
       </div>
 
       {/* 2. Main Navigation Bar */}
-      <nav
-        className={`bg-cream-100/95 backdrop-blur-md border-b transition-all duration-200 ${
-          isScrolled ? 'border-sand-200 shadow-sm py-2.5' : 'border-sand-200/60 py-3.5'
-        }`}
-      >
+      <nav className="bg-white border-b border-sand-200/70 py-3.5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
-            {/* Left: Mobile hamburger */}
+          <div className="flex items-center justify-between gap-4 lg:gap-8">
+            
+            {/* Mobile Hamburger Button */}
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 -ml-2 rounded-xl text-charcoal hover:bg-sand-200/60 transition-colors"
+                className="p-1.5 -ml-1 rounded-xl text-gray-700 hover:bg-sand-100 transition-colors"
                 aria-label="Open navigation menu"
               >
                 <Menu className="w-6 h-6" />
@@ -142,28 +114,127 @@ export default function Header() {
               <HkayaLogo onClick={() => navigateTo('home')} />
             </div>
 
-            {/* Desktop Center: Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-md mx-6">
+            {/* Center Navigation Links (Desktop) */}
+            <div className="hidden lg:flex items-center gap-7 text-sm font-semibold text-gray-700">
+              {/* Home */}
               <button
-                onClick={() => setIsSearchOpen(true)}
-                className="w-full flex items-center justify-between bg-white/90 hover:bg-white text-charcoal-muted px-4 py-2.5 rounded-2xl border border-sand-200 shadow-inner text-sm transition-all group"
+                onClick={() => navigateTo('home')}
+                className={`relative py-1 transition-colors hover:text-[#F97316] ${
+                  currentView === 'home'
+                    ? 'text-[#F97316] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#F97316]'
+                    : ''
+                }`}
               >
-                <span className="flex items-center gap-2.5 text-charcoal-muted/80">
-                  <Search className="w-4 h-4 text-terracotta-500 group-hover:scale-110 transition-transform" />
-                  <span>Search books, toys, stationery, Islamic...</span>
-                </span>
-                <kbd className="hidden lg:inline-block text-[10px] uppercase font-bold text-charcoal-muted/70 bg-sand-100 px-2 py-0.5 rounded-md border border-sand-200">
-                  Ctrl K
-                </kbd>
+                Home
+              </button>
+
+              {/* Shop with Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={handleMouseEnterShop}
+                onMouseLeave={handleMouseLeaveShop}
+              >
+                <button
+                  onClick={() => navigateTo('shop')}
+                  className={`flex items-center gap-1 py-1 transition-colors hover:text-[#F97316] ${
+                    currentView === 'shop' || currentView === 'categories'
+                      ? 'text-[#F97316] font-bold'
+                      : ''
+                  }`}
+                >
+                  <span>Shop</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#F97316]" />
+                </button>
+
+                {/* Dropdown Menu */}
+                {shopDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-sand-200/90 py-2.5 z-50 animate-fade-in">
+                    <button
+                      onClick={() => {
+                        setShopDropdownOpen(false);
+                        navigateTo('shop');
+                      }}
+                      className="w-full text-left px-4 py-2 text-xs font-bold text-[#F97316] hover:bg-sand-50 transition-colors flex items-center justify-between"
+                    >
+                      <span>All Products & Categories</span>
+                      <span>→</span>
+                    </button>
+                    <div className="h-px bg-sand-200 my-1" />
+                    {CATEGORIES.map((cat) => (
+                      <button
+                        key={cat.id}
+                        onClick={() => handleCategoryClick(cat.id)}
+                        className="w-full text-left px-4 py-2 text-xs font-medium text-gray-700 hover:text-[#F97316] hover:bg-sand-50 transition-colors flex items-center gap-2"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#F97316]/60" />
+                        <span>{cat.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* About Us */}
+              <button
+                onClick={() => navigateTo('about')}
+                className={`py-1 transition-colors hover:text-[#F97316] ${
+                  currentView === 'about'
+                    ? 'text-[#F97316] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#F97316]'
+                    : ''
+                }`}
+              >
+                About Us
+              </button>
+
+              {/* Contact Us */}
+              <button
+                onClick={() => navigateTo('contact')}
+                className={`py-1 transition-colors hover:text-[#F97316] ${
+                  currentView === 'contact'
+                    ? 'text-[#F97316] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#F97316]'
+                    : ''
+                }`}
+              >
+                Contact Us
+              </button>
+
+              {/* Policies */}
+              <button
+                onClick={() => navigateTo('policies')}
+                className={`py-1 transition-colors hover:text-[#F97316] ${
+                  currentView === 'policies'
+                    ? 'text-[#F97316] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#F97316]'
+                    : ''
+                }`}
+              >
+                Policies
               </button>
             </div>
 
-            {/* Right Action Icons: Search (mobile), Wishlist, Account, Cart */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              {/* Mobile Search button */}
+            {/* Right: Search Input + Wishlist + Account + Cart */}
+            <div className="flex items-center gap-3">
+              {/* Search Bar matching reference mockup */}
+              <form onSubmit={handleHeaderSearch} className="hidden md:flex items-center relative w-56 lg:w-64 xl:w-72">
+                <input
+                  type="text"
+                  value={headerSearch}
+                  onChange={(e) => setHeaderSearch(e.target.value)}
+                  placeholder="Search for books, toys, and more..."
+                  className="w-full bg-white text-gray-800 text-xs px-3.5 py-2 pr-10 rounded-full border border-sand-200/90 shadow-2xs placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-[#F97316] transition-all"
+                />
+                <button
+                  type="submit"
+                  aria-label="Submit search"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#F97316] hover:bg-[#C2410C] text-white flex items-center justify-center transition-colors shadow-xs"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                </button>
+              </form>
+
+              {/* Mobile Search Icon */}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="md:hidden p-2 rounded-xl text-charcoal hover:bg-sand-200/60 transition-colors"
+                className="md:hidden p-2 rounded-xl text-gray-700 hover:bg-sand-100 transition-colors"
                 aria-label="Search catalog"
               >
                 <Search className="w-5 h-5" />
@@ -172,161 +243,147 @@ export default function Header() {
               {/* Wishlist Icon */}
               <button
                 onClick={() => setIsWishlistOpen(true)}
-                className="relative p-2.5 rounded-2xl text-charcoal hover:bg-sand-200/60 hover:text-terracotta-600 transition-colors"
+                className="relative p-2 rounded-xl text-gray-700 hover:text-[#F97316] hover:bg-sand-100 transition-colors"
                 aria-label="View Wishlist"
               >
                 <Heart className="w-5 h-5" />
                 {wishlistCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center animate-gentle-pulse">
+                  <span className="absolute 0 top-0.5 right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">
                     {wishlistCount}
                   </span>
                 )}
               </button>
 
-              {/* Account button */}
+              {/* Account Icon */}
               <button
                 onClick={() => setIsAccountOpen(true)}
-                className="p-2 sm:px-3 rounded-2xl text-charcoal hover:bg-sand-200/60 hover:text-forest-700 transition-colors flex items-center gap-1.5"
+                className="p-2 rounded-xl text-gray-700 hover:text-[#F97316] hover:bg-sand-100 transition-colors"
                 aria-label="Account details"
               >
                 <User className="w-5 h-5" />
-                {user && (
-                  <span className="text-xs font-bold text-forest-900 hidden sm:inline max-w-[80px] truncate">
-                    {user.name.split(' ')[0]}
-                  </span>
-                )}
               </button>
 
-              {/* Admin Dashboard shortcut if Admin */}
               {isAdmin && (
                 <button
                   onClick={() => navigateTo('admin')}
-                  className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-forest-800 text-gold-200 hover:bg-forest-900 text-xs font-bold shadow-xs"
+                  className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-forest-800 text-gold-200 text-xs font-bold"
                 >
                   <ShieldAlert className="w-3.5 h-3.5 text-gold-400" />
                   <span>Admin</span>
                 </button>
               )}
 
-              {/* Cart Drawer Button */}
+              {/* Cart Icon with Orange Badge matching reference */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="relative flex items-center gap-2 bg-terracotta-600 hover:bg-terracotta-700 text-white px-3.5 py-2.5 rounded-2xl shadow-sm hover:shadow-md transition-all active:scale-95 ml-1"
+                className="relative p-2 text-gray-800 hover:text-[#F97316] transition-colors flex items-center"
                 aria-label="View Shopping Cart"
               >
                 <ShoppingBag className="w-5 h-5" />
-                <span className="text-xs font-bold hidden sm:inline">Cart</span>
-                <span className="w-5 h-5 rounded-full bg-white text-terracotta-700 text-xs font-extrabold flex items-center justify-center shadow-xs">
+                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-[#F97316] text-white text-[11px] font-bold leading-none min-w-[18px] text-center">
                   {itemCount}
                 </span>
               </button>
             </div>
-          </div>
 
-          {/* Desktop Sub-navigation Links */}
-          <div className="hidden lg:flex items-center justify-center gap-8 pt-2.5 border-t border-sand-200/60 mt-2 text-[13px] font-semibold text-charcoal-light">
-            {navLinks.map((link) => {
-              const isActive =
-                currentView === link.view &&
-                (link.category === undefined || false);
-
-              return (
-                <button
-                  key={link.label}
-                  onClick={() => handleNavClick(link)}
-                  className={`py-1.5 transition-colors relative hover:text-terracotta-600 ${
-                    isActive ? 'text-terracotta-600 font-bold' : ''
-                  }`}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
           </div>
         </div>
       </nav>
 
-      {/* 3. Mobile Slide-Over Navigation Drawer */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-charcoal/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
           />
-
-          {/* Drawer Content */}
-          <div className="fixed inset-y-0 left-0 w-4/5 max-w-xs bg-cream-100 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
-            <div>
-              {/* Header with Close */}
-              <div className="flex items-center justify-between pb-5 border-b border-sand-200">
-                <HkayaLogo onClick={() => { navigateTo('home'); setMobileMenuOpen(false); }} />
+          <div className="relative w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto">
+            <div className="p-5">
+              <div className="flex items-center justify-between pb-4 border-b border-sand-200">
+                <HkayaLogo onClick={() => { setMobileMenuOpen(false); navigateTo('home'); }} />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-xl text-charcoal hover:bg-sand-200"
-                  aria-label="Close menu"
+                  className="p-1.5 rounded-xl text-gray-500 hover:bg-sand-100"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
-              {/* Tagline */}
-              <div className="py-3 text-xs text-charcoal-muted font-medium border-b border-sand-200/60">
-                "{STORE_CONFIG.brand.tagline}"
-              </div>
+              {/* Mobile Navigation Links */}
+              <div className="py-4 space-y-2">
+                <button
+                  onClick={() => { setMobileMenuOpen(false); navigateTo('home'); }}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-sm ${
+                    currentView === 'home' ? 'bg-[#F97316]/10 text-[#F97316]' : 'text-gray-700'
+                  }`}
+                >
+                  Home
+                </button>
 
-              {/* Links */}
-              <div className="py-4 space-y-1">
-                {navLinks.map((link) => (
-                  <button
-                    key={link.label}
-                    onClick={() => handleNavClick(link)}
-                    className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold text-charcoal hover:bg-terracotta-50 hover:text-terracotta-700 transition-colors flex items-center justify-between"
-                  >
-                    <span>{link.label}</span>
-                  </button>
-                ))}
-              </div>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); navigateTo('shop'); }}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-sm ${
+                    currentView === 'shop' ? 'bg-[#F97316]/10 text-[#F97316]' : 'text-gray-700'
+                  }`}
+                >
+                  Shop All
+                </button>
 
-              {/* Mobile Quick Shop by Age */}
-              <div className="py-3 border-t border-sand-200/80">
-                <p className="px-3 text-[11px] font-bold text-terracotta-700 uppercase tracking-wider mb-2">
-                  Shop by Age
-                </p>
-                <div className="grid grid-cols-2 gap-1.5 px-1">
-                  {[
-                    { id: '0-2', label: '👶 0–2 Years' },
-                    { id: '3-5', label: '🧒 3–5 Years' },
-                    { id: '6-8', label: '🎒 6–8 Years' },
-                    { id: '9-12', label: '📚 9–12 Years' },
-                    { id: '13+', label: '🌟 13+ Years' }
-                  ].map(a => (
+                <div className="pl-3 py-1 space-y-1">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+                    Categories
+                  </span>
+                  {CATEGORIES.map(cat => (
                     <button
-                      key={a.id}
-                      onClick={() => {
-                        navigateTo('shop', { ageGroup: a.id });
-                        setMobileMenuOpen(false);
-                      }}
-                      className="text-left px-2.5 py-2 rounded-xl bg-white border border-sand-200/90 text-xs font-semibold text-forest-900 hover:border-terracotta-300 active:bg-sand-50"
+                      key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className="w-full text-left px-2 py-1.5 text-xs text-gray-600 hover:text-[#F97316] flex items-center gap-2"
                     >
-                      {a.label}
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F97316]/60" />
+                      <span>{cat.name}</span>
                     </button>
                   ))}
                 </div>
+
+                <button
+                  onClick={() => { setMobileMenuOpen(false); navigateTo('about'); }}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-sm ${
+                    currentView === 'about' ? 'bg-[#F97316]/10 text-[#F97316]' : 'text-gray-700'
+                  }`}
+                >
+                  About Us
+                </button>
+
+                <button
+                  onClick={() => { setMobileMenuOpen(false); navigateTo('contact'); }}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-sm ${
+                    currentView === 'contact' ? 'bg-[#F97316]/10 text-[#F97316]' : 'text-gray-700'
+                  }`}
+                >
+                  Contact Us
+                </button>
+
+                <button
+                  onClick={() => { setMobileMenuOpen(false); navigateTo('policies'); }}
+                  className={`w-full text-left px-3 py-2.5 rounded-xl font-bold text-sm ${
+                    currentView === 'policies' ? 'bg-[#F97316]/10 text-[#F97316]' : 'text-gray-700'
+                  }`}
+                >
+                  Policies
+                </button>
               </div>
             </div>
 
-            {/* Mobile Footer Info */}
-            <div className="pt-6 border-t border-sand-200 text-xs text-charcoal-muted space-y-2">
-              <div className="p-3 rounded-2xl bg-white border border-sand-200 text-[11px]">
-                <p className="font-semibold text-forest-800">Delivery Across Kenya</p>
-                <p className="text-charcoal-muted mt-0.5">
-                  Free over KSh {STORE_CONFIG.delivery.freeDeliveryThreshold.toLocaleString()}
-                </p>
+            {/* Mobile Footer Contact Details */}
+            <div className="p-5 bg-sand-50 border-t border-sand-200 text-xs text-gray-600 space-y-2">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-[#F97316]" />
+                <span>0793 477 288</span>
               </div>
-              <p className="text-[11px] text-center text-charcoal-muted/70">
-                © {STORE_CONFIG.brand.establishedYear} {STORE_CONFIG.brand.name} Kids Library
-              </p>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#F97316]" />
+                <span>info@hikayakidslibrary.co.ke</span>
+              </div>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ const StoreContext = createContext(null);
 export function StoreProvider({ children }) {
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'shop' | 'reading-corner' | 'digital' | 'about' | 'admin'
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -22,6 +23,8 @@ export function StoreProvider({ children }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [activePolicy, setActivePolicy] = useState(null);
+  const [policySection, setPolicySection] = useState('privacy');
 
   // Fetch products from SQLite database on mount
   const refreshProducts = useCallback(async () => {
@@ -61,6 +64,7 @@ export function StoreProvider({ children }) {
         setIsWizardOpen(false);
         setIsCheckoutOpen(false);
         setIsAccountOpen(false);
+        setActivePolicy(null);
       }
     };
 
@@ -69,15 +73,29 @@ export function StoreProvider({ children }) {
   }, []);
 
   const navigateTo = (view, options = {}) => {
+    if (view === 'payment' || view === 'payments' || view === 'payment-policy') {
+      setCurrentView('policies');
+      setPolicySection('payments');
+      if (options.searchQuery !== undefined) {
+        setSearchQuery(options.searchQuery);
+      }
+      return;
+    }
     setCurrentView(view);
     if (options.category !== undefined) {
       setSelectedCategory(options.category);
+    }
+    if (options.subcategory !== undefined) {
+      setSelectedSubcategory(options.subcategory);
     }
     if (options.ageGroup !== undefined) {
       setSelectedAgeGroup(options.ageGroup);
     }
     if (options.searchQuery !== undefined) {
       setSearchQuery(options.searchQuery);
+    }
+    if (options.section !== undefined) {
+      setPolicySection(options.section);
     }
   };
 
@@ -89,6 +107,14 @@ export function StoreProvider({ children }) {
     setSelectedProduct(null);
   };
 
+  const openPolicy = (policyKey) => {
+    setActivePolicy(policyKey);
+  };
+
+  const closePolicy = () => {
+    setActivePolicy(null);
+  };
+
   return (
     <StoreContext.Provider
       value={{
@@ -96,6 +122,8 @@ export function StoreProvider({ children }) {
         setCurrentView,
         selectedCategory,
         setSelectedCategory,
+        selectedSubcategory,
+        setSelectedSubcategory,
         selectedAgeGroup,
         setSelectedAgeGroup,
         searchQuery,
@@ -119,6 +147,12 @@ export function StoreProvider({ children }) {
         setIsCheckoutOpen,
         isAccountOpen,
         setIsAccountOpen,
+        activePolicy,
+        setActivePolicy,
+        openPolicy,
+        closePolicy,
+        policySection,
+        setPolicySection,
         navigateTo
       }}
     >

@@ -120,7 +120,7 @@ export default function ProductCard({ product }) {
         <div className="pt-4 mt-3 border-t border-sand-200/70 space-y-3">
           <div className="flex items-baseline justify-between gap-2">
             <div className="flex items-baseline gap-2 flex-wrap">
-              <span className="text-lg font-extrabold text-forest-900 font-sans">
+              <span className="text-lg font-extrabold text-[#C2410C] font-sans">
                 KSh {Number(product.price || 0).toLocaleString()}
               </span>
               {isSale && (

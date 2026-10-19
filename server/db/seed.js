@@ -69,35 +69,46 @@ export async function runDatabaseSeed() {
     );
   }
 
-  // 3. Normalize legacy categories & set accurate age bounds for all database items
+  // 3. Normalize legacy categories & map into the 6 canonical categories
   db.exec(`
-    UPDATE products SET category = 'islamic-books', subcategory = 'Islamic Reading' WHERE category = 'islamic';
-    UPDATE products SET category = 'childrens-story-books', subcategory = 'Storybooks' WHERE category = 'books';
-    UPDATE products SET category = 'educational-toys', subcategory = 'Montessori & Toys' WHERE category = 'toys';
-    UPDATE products SET category = 'gifts-for-kids', subcategory = 'Awards & Trophies' WHERE category = 'trophies';
-    UPDATE products SET category = 'gifts-for-kids', subcategory = 'Gift Sets' WHERE category = 'gifts';
-    UPDATE products SET category = 'school-learning-essentials', subcategory = 'Backpacks & Bags' WHERE category = 'bags';
-    UPDATE products SET category = 'school-learning-essentials', subcategory = 'Stationery & Pens' WHERE category = 'stationery';
-    UPDATE products SET category = 'school-learning-essentials', subcategory = 'Exercise Books' WHERE category = 'exercise-books';
-    UPDATE products SET category = 'school-learning-essentials', subcategory = 'Lunch & Dishes' WHERE category = 'dishes-lunch';
-    UPDATE products SET category = 'school-learning-essentials', subcategory = 'Teachers Corner' WHERE category = 'teachers';
-    UPDATE products SET category = 'activity-coloring-books', subcategory = 'Printable Activities' WHERE category = 'digital';
+    -- Books & Reading
+    UPDATE products SET category = 'books-reading' 
+    WHERE category IN ('islamic-books', 'quran-arabic-learning', 'childrens-story-books', 'activity-coloring-books', 'islamic', 'books')
+       OR id IN ('hk-se-01', 'hk-se-02', 'hk-se-03', 'hk-re-01', 'hk-digital-arabic-activity-pack', 'hk-digital-ramadan-pack');
 
-    -- Assign numeric age bounds to legacy items where age_min IS NULL
-    UPDATE products SET age_min = 6, age_max = 15 WHERE age_min IS NULL AND subcategory = 'Backpacks & Bags';
-    UPDATE products SET age_min = 1, age_max = 8 WHERE age_min IS NULL AND subcategory = 'Lunch & Dishes';
-    UPDATE products SET age_min = 6, age_max = 18 WHERE age_min IS NULL AND subcategory = 'Stationery & Pens';
-    UPDATE products SET age_min = 5, age_max = 16 WHERE age_min IS NULL AND subcategory = 'Exercise Books';
-    UPDATE products SET age_min = 6, age_max = 16 WHERE age_min IS NULL AND subcategory = 'Awards & Trophies';
-    UPDATE products SET age_min = 1, age_max = 6 WHERE age_min IS NULL AND subcategory = 'Montessori & Toys';
-    UPDATE products SET age_min = 3, age_max = 9 WHERE age_min IS NULL AND category = 'childrens-story-books';
-    UPDATE products SET age_min = 3, age_max = 12 WHERE age_min IS NULL AND category = 'islamic-books';
-    UPDATE products SET age_min = 4, age_max = 12 WHERE age_min IS NULL AND category = 'gifts-for-kids';
-    UPDATE products SET age_min = 3, age_max = 10 WHERE age_min IS NULL AND category = 'activity-coloring-books';
-    UPDATE products SET age_min = 3, age_max = 10 WHERE age_min IS NULL AND category = 'quran-arabic-learning';
-    UPDATE products SET age_min = 3, age_max = 8 WHERE age_min IS NULL AND category = 'puzzles-educational-games';
-    UPDATE products SET age_min = 3, age_max = 8 WHERE age_min IS NULL AND category = 'flashcards-learning-cards';
-    UPDATE products SET age_min = 4, age_max = 12 WHERE age_min IS NULL AND category = 'ramadan-eid';
+    -- Educational Toys
+    UPDATE products SET category = 'educational-toys' 
+    WHERE category IN ('learning-kits', 'puzzles-educational-games', 'flashcards-learning-cards', 'toys')
+       OR id IN ('hk-re-02', 'hk-ramadan-kids-activity-kit');
+
+    -- Gifts & Accessories
+    UPDATE products SET category = 'gifts-accessories' 
+    WHERE category IN ('gifts-for-kids', 'ramadan-eid', 'gifts', 'trophies')
+       OR id IN ('hk-re-03', 'hk-re-04', 'hk-eid-gift-box', 'hk-creative-art-gift-box', 'hk-golden-student-trophy', 'hk-reading-champion-medals');
+
+    -- School Bags
+    UPDATE products SET category = 'school-bags', subcategory = 'Children''s backpacks' 
+    WHERE id = 'hk-ergonomic-kids-backpack';
+
+    -- Lunch Boxes & Bottles
+    UPDATE products SET category = 'lunch-boxes-bottles', subcategory = 'Lunch boxes' 
+    WHERE id = 'hk-stainless-bento-lunchbox';
+
+    UPDATE products SET category = 'lunch-boxes-bottles', subcategory = 'Reusable water bottles' 
+    WHERE id = 'hk-insulated-water-bottle';
+
+    UPDATE products SET category = 'lunch-boxes-bottles', subcategory = 'Insulated lunch bags' 
+    WHERE id = 'hk-insulated-lunch-bag';
+
+    UPDATE products SET category = 'lunch-boxes-bottles', subcategory = 'Food containers' 
+    WHERE id = 'hk-bamboo-kids-dining-set';
+
+    -- Stationery (remaining school-learning-essentials)
+    UPDATE products SET category = 'stationery' 
+    WHERE category IN ('school-learning-essentials', 'stationery', 'exercise-books', 'teachers');
+
+    -- Assign numeric age bounds to items where age_min IS NULL
+    UPDATE products SET age_min = 3, age_max = 16 WHERE age_min IS NULL;
   `);
 
   const totalInDb = db.prepare('SELECT COUNT(*) as count FROM products WHERE active = 1').get().count;

@@ -194,7 +194,7 @@ export default function ProductModal() {
 
                 {/* Price Display */}
                 <div className="mt-4 py-3 border-y border-sand-200/80 flex items-baseline gap-3">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-forest-900 font-sans">
+                  <span className="text-2xl sm:text-3xl font-extrabold text-[#C2410C] font-sans">
                     KSh {Number(selectedProduct.price || 0).toLocaleString()}
                   </span>
                   {isSale && (

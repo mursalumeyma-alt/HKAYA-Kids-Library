@@ -17,24 +17,32 @@ import RecommendationWizard from './components/RecommendationWizard';
 import ArticleModal from './components/ArticleModal';
 import AccountModal from './components/AccountModal';
 import WhatsAppFloatingButton from './components/WhatsAppFloatingButton';
+import PolicyModal from './components/PolicyModal';
 
 // Views
 import HomeView from './views/HomeView';
 import ShopView from './views/ShopView';
+import CategoriesView from './views/CategoriesView';
 import ReadingCornerView from './views/ReadingCornerView';
 import DigitalResourcesView from './views/DigitalResourcesView';
 import AboutView from './views/AboutView';
+import ContactView from './views/ContactView';
+import PoliciesView from './views/PoliciesView';
 import AdminView from './views/AdminView';
 
 import { Home, Compass, ShoppingBag, Heart, BookOpen } from 'lucide-react';
 
 function AppContent() {
-  const { currentView, navigateTo, setIsWizardOpen } = useStore();
+  const { currentView, navigateTo, setIsWizardOpen, setIsCheckoutOpen } = useStore();
   const { toastMessage, itemCount, setIsCartOpen } = useCart();
   const { wishlistCount, setIsWishlistOpen } = useWishlist();
 
+  if (typeof window !== 'undefined') {
+    window.__openCheckout = () => setIsCheckoutOpen(true);
+  }
+
   return (
-    <div className="min-h-screen flex flex-col justify-between relative bg-cream-50 text-charcoal pb-16 sm:pb-0">
+    <div className="min-h-screen flex flex-col justify-between relative bg-[#FFF9F1] text-charcoal pb-16 sm:pb-0">
       {/* 1. Top Demo Notice Banner */}
       <DemoNoticeBanner />
 
@@ -44,10 +52,13 @@ function AppContent() {
       {/* 3. Dynamic Page View */}
       <main className="flex-1">
         {currentView === 'home' && <HomeView />}
+        {currentView === 'categories' && <CategoriesView />}
         {currentView === 'shop' && <ShopView />}
         {currentView === 'reading-corner' && <ReadingCornerView />}
         {currentView === 'digital' && <DigitalResourcesView />}
         {currentView === 'about' && <AboutView />}
+        {currentView === 'contact' && <ContactView />}
+        {(currentView === 'policies' || currentView === 'payment' || currentView === 'payments' || currentView === 'payment-policy') && <PoliciesView />}
         {currentView === 'admin' && <AdminView />}
       </main>
 
@@ -64,6 +75,7 @@ function AppContent() {
       <ArticleModal />
       <AccountModal />
       <WhatsAppFloatingButton />
+      <PolicyModal />
 
       {/* 6. Toast Notification */}
       {toastMessage && (
@@ -84,11 +96,11 @@ function AppContent() {
         </button>
 
         <button
-          onClick={() => navigateTo('shop')}
-          className={`flex flex-col items-center gap-1 ${currentView === 'shop' ? 'text-terracotta-600' : ''}`}
+          onClick={() => navigateTo('categories')}
+          className={`flex flex-col items-center gap-1 ${currentView === 'categories' ? 'text-terracotta-600' : ''}`}
         >
           <Compass className="w-5 h-5" />
-          <span>Shop</span>
+          <span>Categories</span>
         </button>
 
         <button

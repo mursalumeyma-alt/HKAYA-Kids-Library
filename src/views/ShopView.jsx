@@ -1,6 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
-import { matchesAgeGroup, getAgeGroupById } from '../data/categories';
+import {
+  matchesAgeGroup,
+  getAgeGroupById,
+  CATEGORY_ALIASES,
+  getProductsForCategory,
+  matchesSubcategory,
+  getSubName,
+  getSubImage,
+  getSubAlt,
+  getSubDesc
+} from '../data/categories';
 import ProductCard from '../components/ProductCard';
 import {
   Search,
@@ -9,7 +19,10 @@ import {
   RotateCcw,
   Sparkles,
   ChevronRight,
-  Filter
+  Filter,
+  Layers,
+  ArrowDown,
+  MessageCircle
 } from 'lucide-react';
 
 export default function ShopView() {
@@ -19,24 +32,56 @@ export default function ShopView() {
     ageGroups,
     selectedCategory,
     setSelectedCategory,
+    selectedSubcategory: storeSubcategory,
+    setSelectedSubcategory: setStoreSubcategory,
     selectedAgeGroup,
     setSelectedAgeGroup,
     searchQuery,
-    setSearchQuery
+    setSearchQuery,
+    navigateTo
   } = useStore();
 
   // Local filter states
   const [localSearch, setLocalSearch] = useState(searchQuery || '');
+  const [selectedSubcategory, setSelectedSubcategory] = useState(storeSubcategory || null);
   const [maxPrice, setMaxPrice] = useState(5000);
   const [productType, setProductType] = useState('all'); // 'all' | 'physical' | 'digital'
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'newest' | 'price-low' | 'price-high' | 'bestseller'
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  // Sync searchQuery prop changes
+  useEffect(() => {
+    if (searchQuery !== undefined) {
+      setLocalSearch(searchQuery);
+    }
+  }, [searchQuery]);
+
+  // Sync store subcategory when navigated to
+  useEffect(() => {
+    if (storeSubcategory !== undefined) {
+      setSelectedSubcategory(storeSubcategory);
+    }
+  }, [storeSubcategory]);
+
+  // Reset pagination when category, subcategory, search or sort changes
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [selectedCategory, selectedSubcategory, localSearch, sortBy, maxPrice, productType]);
+
+  // Reset subcategory when selectedCategory changes unless subcategory was specifically passed
+  useEffect(() => {
+    if (storeSubcategory === undefined) {
+      setSelectedSubcategory(null);
+    }
+  }, [selectedCategory, storeSubcategory]);
 
   // Active Category & Age Objects
   const currentCategoryObj = useMemo(() => {
     if (!selectedCategory) return null;
-    return categories.find(c => c.id === selectedCategory || c.slug === selectedCategory) || null;
+    const resolvedId = CATEGORY_ALIASES[selectedCategory] || selectedCategory;
+    return categories.find(c => c.id === resolvedId || c.slug === resolvedId || c.id === selectedCategory) || null;
   }, [selectedCategory, categories]);
 
   const currentAgeObj = useMemo(() => {
@@ -44,26 +89,32 @@ export default function ShopView() {
     return getAgeGroupById(selectedAgeGroup);
   }, [selectedAgeGroup]);
 
-  // Filtered & Sorted products computation (Mixed collection)
+  // Filtered & Sorted products computation (Peekaboo-inspired category filtering)
   const filteredProducts = useMemo(() => {
     const list = products || [];
 
     return list.filter((item) => {
-      // 1. Age group filter using interval boundary overlap
+      // 1. Age group filter
       if (selectedAgeGroup) {
         if (!matchesAgeGroup(item, selectedAgeGroup)) {
           return false;
         }
       }
 
-      // 2. Category filter (works alongside age filter)
+      // 2. Category filter
       if (selectedCategory) {
-        if (item.category !== selectedCategory && item.slug !== selectedCategory) {
+        const matchesCat = getProductsForCategory([item], selectedCategory).length > 0;
+        if (!matchesCat) return false;
+      }
+
+      // 2.5 Subcategory filter within category
+      if (selectedSubcategory && selectedSubcategory !== 'all') {
+        if (!matchesSubcategory(item, selectedSubcategory)) {
           return false;
         }
       }
 
-      // 3. Search query (works alongside age filter without resetting it)
+      // 3. Search query
       if (localSearch.trim() !== '') {
         const q = localSearch.toLowerCase();
         const matchesName = item.name?.toLowerCase().includes(q);
@@ -104,21 +155,31 @@ export default function ShopView() {
       const bWeight = ((b.featured || b.isStaffPick) ? 3 : 0) + ((b.bestSeller || b.best_seller) ? 2 : 0) + ((b.newArrival || b.new_arrival) ? 1 : 0);
       return bWeight - aWeight;
     });
-  }, [products, selectedAgeGroup, selectedCategory, localSearch, maxPrice, productType, inStockOnly, sortBy]);
+  }, [products, selectedAgeGroup, selectedCategory, selectedSubcategory, localSearch, maxPrice, productType, inStockOnly, sortBy]);
+
+  // Paginated view of products
+  const paginatedProducts = useMemo(() => {
+    return filteredProducts.slice(0, visibleCount);
+  }, [filteredProducts, visibleCount]);
 
   const clearAllFilters = () => {
     setSelectedAgeGroup(null);
     setSelectedCategory(null);
+    setSelectedSubcategory(null);
+    if (setStoreSubcategory) setStoreSubcategory(null);
     setLocalSearch('');
+    setSearchQuery('');
     setMaxPrice(5000);
     setProductType('all');
     setInStockOnly(false);
     setSortBy('featured');
+    setVisibleCount(12);
   };
 
   const hasActiveFilters =
     selectedAgeGroup !== null ||
     selectedCategory !== null ||
+    (selectedSubcategory !== null && selectedSubcategory !== 'all') ||
     localSearch.trim() !== '' ||
     maxPrice < 5000 ||
     productType !== 'all' ||
@@ -131,18 +192,42 @@ export default function ShopView() {
         {/* Breadcrumb & Collection Header */}
         <div className="mb-6 sm:mb-8">
           <div className="text-xs text-charcoal-muted mb-2 flex items-center gap-1.5 font-medium flex-wrap">
-            <span>Home</span>
-            <ChevronRight className="w-3.5 h-3.5" />
             <span
               className="cursor-pointer hover:text-terracotta-700"
-              onClick={() => { setSelectedAgeGroup(null); setSelectedCategory(null); }}
+              onClick={() => navigateTo('home')}
             >
-              Store Catalog
+              Home
             </span>
+            <ChevronRight className="w-3.5 h-3.5 text-sand-400" />
+            <span
+              className="cursor-pointer hover:text-terracotta-700"
+              onClick={() => navigateTo('categories')}
+            >
+              Shop by Category
+            </span>
+
+            {currentCategoryObj && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-sand-400" />
+                <span
+                  className={`cursor-pointer hover:text-terracotta-700 ${!selectedSubcategory ? 'text-terracotta-700 font-bold' : ''}`}
+                  onClick={() => setSelectedSubcategory(null)}
+                >
+                  {currentCategoryObj.name}
+                </span>
+              </>
+            )}
+
+            {selectedSubcategory && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-sand-400" />
+                <span className="text-terracotta-700 font-bold">{selectedSubcategory}</span>
+              </>
+            )}
 
             {currentAgeObj && (
               <>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-3.5 h-3.5 text-sand-400" />
                 <span
                   className={`font-semibold cursor-pointer hover:text-terracotta-700 ${!currentCategoryObj ? 'text-terracotta-700 font-bold' : ''}`}
                   onClick={() => setSelectedCategory(null)}
@@ -151,20 +236,18 @@ export default function ShopView() {
                 </span>
               </>
             )}
-
-            {currentCategoryObj && (
-              <>
-                <ChevronRight className="w-3.5 h-3.5" />
-                <span className="text-terracotta-700 font-bold">{currentCategoryObj.name}</span>
-              </>
-            )}
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-3xl sm:text-4xl font-display font-semibold text-forest-900 leading-tight">
-                  {selectedAgeGroup && selectedCategory ? (
+                  {selectedSubcategory && currentCategoryObj ? (
+                    <span className="flex items-center gap-2">
+                      <span>{currentCategoryObj.emoji}</span>
+                      <span>{selectedSubcategory}</span>
+                    </span>
+                  ) : selectedAgeGroup && selectedCategory ? (
                     <span className="flex items-center gap-2">
                       <span>{currentCategoryObj?.emoji}</span>
                       <span>{currentCategoryObj?.name} for Ages {currentAgeObj?.label}</span>
@@ -179,11 +262,13 @@ export default function ShopView() {
                       <span>{currentCategoryObj.emoji}</span>
                       <span>{currentCategoryObj.name}</span>
                     </span>
+                  ) : localSearch ? (
+                    `Search Results for "${localSearch}"`
                   ) : (
                     "All Learning Resources & Books"
                   )}
                 </h1>
-                {currentCategoryObj?.arabic && !selectedAgeGroup && (
+                {currentCategoryObj?.arabic && !selectedAgeGroup && !selectedSubcategory && (
                   <span className="text-base font-arabic text-terracotta-700 hidden sm:inline">
                     {currentCategoryObj.arabic}
                   </span>
@@ -192,14 +277,67 @@ export default function ShopView() {
 
               {/* Header Supporting Text */}
               <p className="text-xs sm:text-sm text-charcoal-muted mt-1.5 max-w-2xl leading-relaxed">
-                {selectedAgeGroup && selectedCategory
-                  ? `Showing ${currentCategoryObj?.name.toLowerCase()} suitable for ${currentAgeObj?.label}.`
-                  : selectedAgeGroup
-                    ? "Explore books, school essentials, learning resources, toys and gifts suitable for this age group."
-                    : currentCategoryObj
-                      ? currentCategoryObj.description
-                      : "Explore our complete collection of Islamic books, Qur'an Arabic tools, children's storybooks, puzzles, and school essentials."}
+                {selectedSubcategory
+                  ? `Showing curated ${selectedSubcategory.toLowerCase()} within ${currentCategoryObj?.name}.`
+                  : selectedAgeGroup && selectedCategory
+                    ? `Showing ${currentCategoryObj?.name.toLowerCase()} suitable for ${currentAgeObj?.label}.`
+                    : selectedAgeGroup
+                      ? "Explore books, school essentials, learning resources, toys and gifts suitable for this age group."
+                      : currentCategoryObj
+                        ? currentCategoryObj.description
+                        : "Explore our complete collection of storybooks, classroom stationery, school backpacks, bento lunch boxes, educational toys, and celebration gifts."}
               </p>
+
+              {/* Peekaboo-Inspired Subcategory Filter Pills with Images */}
+              {currentCategoryObj && currentCategoryObj.subcategories && currentCategoryObj.subcategories.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-sand-200/60 flex items-center gap-2 overflow-x-auto pb-1.5 no-scrollbar">
+                  <span className="text-xs font-bold text-forest-900 shrink-0">Subcategories:</span>
+                  <button
+                    onClick={() => setSelectedSubcategory(null)}
+                    className={`shrink-0 px-3.5 py-1.5 rounded-2xl text-xs font-semibold transition-all ${
+                      selectedSubcategory === null
+                        ? 'bg-terracotta-600 text-white shadow-xs font-bold'
+                        : 'bg-white border border-sand-200 text-charcoal hover:border-terracotta-300'
+                    }`}
+                  >
+                    All {currentCategoryObj.name} ({getProductsForCategory(products, currentCategoryObj.id).length})
+                  </button>
+                  {currentCategoryObj.subcategories.map(sub => {
+                    const subName = getSubName(sub);
+                    const subImg = getSubImage(sub);
+                    const subAlt = getSubAlt(sub);
+                    const isSelected = selectedSubcategory === subName;
+                    const subCount = getProductsForCategory(products, currentCategoryObj.id).filter(p => matchesSubcategory(p, subName)).length;
+
+                    return (
+                      <button
+                        key={subName}
+                        onClick={() => setSelectedSubcategory(isSelected ? null : subName)}
+                        className={`shrink-0 px-2.5 py-1.5 rounded-2xl text-xs font-semibold transition-all flex items-center gap-2 ${
+                          isSelected
+                            ? 'bg-terracotta-600 text-white shadow-xs font-bold ring-2 ring-terracotta-400'
+                            : 'bg-white border border-sand-200 text-charcoal hover:border-terracotta-300 hover:bg-sand-50/60'
+                        }`}
+                      >
+                        {subImg && (
+                          <img
+                            src={subImg}
+                            alt={subAlt}
+                            className="w-5 h-5 rounded-md object-cover shrink-0 border border-sand-200 shadow-2xs"
+                            loading="lazy"
+                          />
+                        )}
+                        <span>{subName}</span>
+                        {subCount > 0 && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold ${isSelected ? 'bg-terracotta-800 text-white' : 'bg-sand-100 text-charcoal-muted'}`}>
+                            {subCount}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Total matching items badge */}
@@ -211,71 +349,27 @@ export default function ShopView() {
           </div>
         </div>
 
-        {/* Quick Age Filter Bar */}
-        <div className="mb-4 bg-white p-3.5 rounded-3xl border border-sand-200 shadow-soft">
-          <div className="flex items-center justify-between mb-2 px-1">
-            <span className="text-xs font-bold text-forest-900 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-terracotta-600" />
-              <span>Shop by Age:</span>
-            </span>
-            {selectedAgeGroup && (
-              <button
-                onClick={() => setSelectedAgeGroup(null)}
-                className="text-[11px] font-bold text-terracotta-700 hover:underline"
-              >
-                Clear Age
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-            <button
-              onClick={() => setSelectedAgeGroup(null)}
-              className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all ${
-                selectedAgeGroup === null
-                  ? 'bg-forest-900 text-white shadow-soft'
-                  : 'bg-sand-50 border border-sand-200 text-charcoal hover:border-terracotta-300'
-              }`}
-            >
-              All Ages
-            </button>
-            {ageGroups.map((a) => {
-              const isSelected = selectedAgeGroup === a.id;
-              return (
-                <button
-                  key={a.id}
-                  onClick={() => setSelectedAgeGroup(isSelected ? null : a.id)}
-                  className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-bold transition-all ${
-                    isSelected
-                      ? 'bg-amber-500 text-forest-950 shadow-soft ring-2 ring-amber-300'
-                      : 'bg-sand-50 border border-sand-200 text-charcoal hover:border-terracotta-300'
-                  }`}
-                >
-                  <span>{a.emoji}</span>
-                  <span>{a.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Quick Horizontal Category Scrolling Bar */}
+        {/* Quick Horizontal Department Scrolling Bar */}
         <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
           <button
-            onClick={() => setSelectedCategory(null)}
+            onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); }}
             className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all ${
               selectedCategory === null
                 ? 'bg-terracotta-600 text-white shadow-soft'
                 : 'bg-white border border-sand-200 text-charcoal hover:border-terracotta-300'
             }`}
           >
-            All Categories
+            All Departments
           </button>
           {categories.map((c) => {
-            const isSelected = selectedCategory === c.id;
+            const isSelected = selectedCategory === c.id || CATEGORY_ALIASES[selectedCategory] === c.id;
             return (
               <button
                 key={c.id}
-                onClick={() => setSelectedCategory(isSelected ? null : c.id)}
+                onClick={() => {
+                  setSelectedCategory(isSelected ? null : c.id);
+                  setSelectedSubcategory(null);
+                }}
                 className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all ${
                   isSelected
                     ? 'bg-terracotta-600 text-white shadow-soft'
@@ -291,14 +385,13 @@ export default function ShopView() {
 
         {/* Top Search & Sorting Toolbar */}
         <div className="bg-white p-4 rounded-3xl border border-sand-200 shadow-soft mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Search Input (Coexists with selected age!) */}
           <div className="relative w-full md:w-96">
             <Search className="w-4 h-4 text-terracotta-600 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              placeholder={selectedAgeGroup ? `Search within ages ${currentAgeObj?.label}...` : "Search by title, topic, or keyword..."}
+              placeholder={currentCategoryObj ? `Search within ${currentCategoryObj.name}...` : "Search by title, topic, or keyword..."}
               className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-sand-50 border border-sand-200 text-xs sm:text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-terracotta-400"
             />
             {localSearch && (
@@ -359,65 +452,13 @@ export default function ShopView() {
               )}
             </div>
 
-            {/* 1. Shop by Age Section */}
+            {/* 1. Departments Section */}
             <div>
               <div className="flex items-center justify-between mb-2.5">
-                <h4 className="text-xs font-bold text-forest-900 flex items-center gap-1.5">
-                  <span>👶 Shop by Age</span>
-                </h4>
-                {selectedAgeGroup && (
-                  <button
-                    onClick={() => setSelectedAgeGroup(null)}
-                    className="text-[10px] font-bold text-terracotta-700 hover:underline"
-                  >
-                    Clear Age
-                  </button>
-                )}
-              </div>
-              <div className="space-y-1 text-xs">
-                <button
-                  onClick={() => setSelectedAgeGroup(null)}
-                  className={`w-full text-left px-3 py-2 rounded-xl transition-colors font-medium flex justify-between ${
-                    selectedAgeGroup === null
-                      ? 'bg-forest-900 text-white font-bold'
-                      : 'text-charcoal hover:bg-sand-100'
-                  }`}
-                >
-                  <span>All Ages</span>
-                  <span className={selectedAgeGroup === null ? 'text-forest-200' : 'text-charcoal-muted'}>
-                    {products.length}
-                  </span>
-                </button>
-                {ageGroups.map((age) => {
-                  const count = products.filter(p => matchesAgeGroup(p, age.id)).length;
-                  const isSelected = selectedAgeGroup === age.id;
-                  return (
-                    <button
-                      key={age.id}
-                      onClick={() => setSelectedAgeGroup(isSelected ? null : age.id)}
-                      className={`w-full text-left px-3 py-2 rounded-xl transition-colors font-medium flex justify-between items-center ${
-                        isSelected
-                          ? 'bg-amber-500 text-forest-950 font-bold'
-                          : 'text-charcoal hover:bg-sand-100'
-                      }`}
-                    >
-                      <span>{age.emoji} {age.label}</span>
-                      <span className={`text-[11px] ${isSelected ? 'text-forest-950/80 font-bold' : 'text-charcoal-muted'}`}>
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 2. Shop by Category Section */}
-            <div className="pt-4 border-t border-sand-200">
-              <div className="flex items-center justify-between mb-2.5">
-                <h4 className="text-xs font-bold text-forest-900">Category</h4>
+                <h4 className="text-xs font-bold text-forest-900">Departments</h4>
                 {selectedCategory && (
                   <button
-                    onClick={() => setSelectedCategory(null)}
+                    onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); }}
                     className="text-[10px] font-bold text-terracotta-700 hover:underline"
                   >
                     Clear
@@ -426,28 +467,27 @@ export default function ShopView() {
               </div>
               <div className="space-y-1 text-xs max-h-80 overflow-y-auto pr-1">
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); }}
                   className={`w-full text-left px-3 py-2 rounded-xl transition-colors font-medium flex justify-between ${
                     selectedCategory === null
                       ? 'bg-terracotta-50 text-terracotta-800 font-bold'
                       : 'text-charcoal hover:bg-sand-100'
                   }`}
                 >
-                  <span>All Categories</span>
+                  <span>All Departments</span>
                   <span>{products.length}</span>
                 </button>
                 {categories.map((cat) => {
-                  const count = (products || []).filter(p => {
-                    const matchCat = p.category === cat.id;
-                    const matchAge = selectedAgeGroup ? matchesAgeGroup(p, selectedAgeGroup) : true;
-                    return matchCat && matchAge;
-                  }).length;
-                  const isSelected = selectedCategory === cat.id;
+                  const count = getProductsForCategory(products, cat.id).length;
+                  const isSelected = selectedCategory === cat.id || CATEGORY_ALIASES[selectedCategory] === cat.id;
 
                   return (
                     <button
                       key={cat.id}
-                      onClick={() => setSelectedCategory(isSelected ? null : cat.id)}
+                      onClick={() => {
+                        setSelectedCategory(isSelected ? null : cat.id);
+                        setSelectedSubcategory(null);
+                      }}
                       className={`w-full text-left px-3 py-2 rounded-xl transition-colors font-medium flex justify-between items-center ${
                         isSelected
                           ? 'bg-terracotta-50 text-terracotta-800 font-bold'
@@ -465,6 +505,70 @@ export default function ShopView() {
                 })}
               </div>
             </div>
+
+            {/* 2. Subcategories Sidebar Filter (when a department is active) */}
+            {currentCategoryObj && currentCategoryObj.subcategories && (
+              <div className="pt-4 border-t border-sand-200">
+                <div className="flex items-center justify-between mb-2.5">
+                  <h4 className="text-xs font-bold text-forest-900">Subcategories</h4>
+                  {selectedSubcategory && (
+                    <button
+                      onClick={() => setSelectedSubcategory(null)}
+                      className="text-[10px] font-bold text-terracotta-700 hover:underline"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-1 text-xs">
+                  <button
+                    onClick={() => setSelectedSubcategory(null)}
+                    className={`w-full text-left px-3 py-2 rounded-xl transition-colors font-medium flex justify-between ${
+                      selectedSubcategory === null
+                        ? 'bg-forest-900 text-white font-bold'
+                        : 'text-charcoal hover:bg-sand-100'
+                    }`}
+                  >
+                    <span>All Subcategories</span>
+                    <span>{getProductsForCategory(products, currentCategoryObj.id).length}</span>
+                  </button>
+                  {currentCategoryObj.subcategories.map(sub => {
+                    const subName = getSubName(sub);
+                    const subImg = getSubImage(sub);
+                    const subAlt = getSubAlt(sub);
+                    const isSelected = selectedSubcategory === subName;
+                    const subCount = getProductsForCategory(products, currentCategoryObj.id).filter(p => matchesSubcategory(p, subName)).length;
+
+                    return (
+                      <button
+                        key={subName}
+                        onClick={() => setSelectedSubcategory(isSelected ? null : subName)}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-xl transition-colors font-medium flex justify-between items-center gap-2 ${
+                          isSelected
+                            ? 'bg-forest-900 text-white font-bold'
+                            : 'text-charcoal hover:bg-sand-100'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2 truncate">
+                          {subImg && (
+                            <img
+                              src={subImg}
+                              alt={subAlt}
+                              className="w-5 h-5 rounded-md object-cover shrink-0 border border-sand-200"
+                              loading="lazy"
+                            />
+                          )}
+                          <span className="truncate">{subName}</span>
+                        </span>
+                        <span className={`text-xs shrink-0 ${isSelected ? 'text-gold-300 font-bold' : 'text-charcoal-muted'}`}>
+                          {subCount}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* 3. Price Filter Slider */}
             <div className="pt-4 border-t border-sand-200">
@@ -493,7 +597,7 @@ export default function ShopView() {
               <div className="space-y-1 text-xs">
                 {[
                   { id: 'all', label: 'All Formats' },
-                  { id: 'physical', label: 'Physical Books & Toys' },
+                  { id: 'physical', label: 'Physical Products' },
                   { id: 'digital', label: 'Printable Digital PDFs' }
                 ].map(type => (
                   <label key={type.id} className="flex items-center gap-2 cursor-pointer py-1">
@@ -524,7 +628,7 @@ export default function ShopView() {
             </div>
           </aside>
 
-          {/* Right Product Grid (Mixed Age Collection) */}
+          {/* Right Product Grid */}
           <main className="lg:col-span-9">
             
             {/* Active Filters Bar */}
@@ -532,35 +636,32 @@ export default function ShopView() {
               <div className="flex flex-wrap items-center gap-2 mb-6 p-3.5 bg-white rounded-2xl border border-sand-200 shadow-xs">
                 <span className="text-xs text-charcoal-muted font-bold">Active Filters:</span>
                 
-                {/* Age Pill */}
-                {selectedAgeGroup && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-950 text-xs font-bold border border-amber-200">
-                    <span>Age: {currentAgeObj?.emoji} {currentAgeObj?.label}</span>
-                    <button
-                      onClick={() => setSelectedAgeGroup(null)}
-                      className="hover:text-rose-600 transition-colors"
-                      title="Clear Age Filter"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </span>
-                )}
-
-                {/* Category Pill */}
                 {selectedCategory && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 text-terracotta-900 text-xs font-bold border border-terracotta-200">
-                    <span>Category: {currentCategoryObj?.name}</span>
+                    <span>Department: {currentCategoryObj?.name}</span>
                     <button
-                      onClick={() => setSelectedCategory(null)}
+                      onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); }}
                       className="hover:text-rose-600 transition-colors"
-                      title="Clear Category Filter"
+                      title="Clear Department Filter"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </span>
                 )}
 
-                {/* Search Query Pill */}
+                {selectedSubcategory && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 text-forest-900 text-xs font-bold border border-forest-200">
+                    <span>Subcategory: {selectedSubcategory}</span>
+                    <button
+                      onClick={() => setSelectedSubcategory(null)}
+                      className="hover:text-rose-600 transition-colors"
+                      title="Clear Subcategory Filter"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                )}
+
                 {localSearch && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sand-200 text-forest-900 text-xs font-bold">
                     <span>Query: "{localSearch}"</span>
@@ -574,16 +675,7 @@ export default function ShopView() {
                   </span>
                 )}
 
-                {/* Quick Clear Buttons */}
                 <div className="flex items-center gap-3 ml-auto">
-                  {selectedAgeGroup && (
-                    <button
-                      onClick={() => setSelectedAgeGroup(null)}
-                      className="text-xs font-bold text-terracotta-700 hover:underline"
-                    >
-                      Clear Age
-                    </button>
-                  )}
                   <button
                     onClick={clearAllFilters}
                     className="text-xs font-bold text-charcoal-muted hover:text-charcoal hover:underline"
@@ -594,41 +686,107 @@ export default function ShopView() {
               </div>
             )}
 
-            {/* Mixed Collection Grid */}
             {filteredProducts.length === 0 ? (
-              <div className="p-12 text-center bg-white rounded-3xl border border-sand-200 shadow-soft">
-                <div className="w-16 h-16 rounded-2xl bg-sand-200 text-charcoal-muted flex items-center justify-center mx-auto mb-3">
-                  <Search className="w-8 h-8 opacity-40" />
-                </div>
-                <h3 className="font-bold text-base text-forest-900">No matching products found</h3>
-                <p className="text-xs text-charcoal-muted mt-1 max-w-sm mx-auto leading-relaxed">
-                  {selectedAgeGroup
-                    ? `No products currently match this combination for Ages ${currentAgeObj?.label}. Try clearing the category or search filter.`
-                    : "Try adjusting your filters, price range, or search terms to discover more items."}
+              <div className="p-8 sm:p-12 text-center bg-white rounded-3xl border border-sand-200 shadow-soft">
+                {(() => {
+                  const activeSubObj = currentCategoryObj?.subcategories?.find(s => getSubName(s) === selectedSubcategory);
+                  const activeSubImg = getSubImage(activeSubObj);
+                  const activeSubAlt = getSubAlt(activeSubObj);
+
+                  if (activeSubImg) {
+                    return (
+                      <div className="w-24 h-24 rounded-2xl overflow-hidden mx-auto mb-4 border border-sand-200/90 shadow-sm bg-sand-100">
+                        <img
+                          src={activeSubImg}
+                          alt={activeSubAlt}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="w-16 h-16 rounded-2xl bg-sand-200 text-charcoal-muted flex items-center justify-center mx-auto mb-3">
+                      <Search className="w-8 h-8 opacity-40" />
+                    </div>
+                  );
+                })()}
+
+                <h3 className="font-bold text-lg text-forest-900">
+                  {selectedSubcategory ? `Curating items for "${selectedSubcategory}"` : "No matching products found"}
+                </h3>
+                <p className="text-xs sm:text-sm text-charcoal-muted mt-1.5 max-w-md mx-auto leading-relaxed">
+                  {selectedSubcategory
+                    ? `We are curating and stocking new products for this subcategory. Check back soon, or chat with our team on WhatsApp to request specific items or reserve copies!`
+                    : `No products currently match this combination within ${currentCategoryObj?.name || 'this department'}. Try selecting a different subcategory or clearing the search terms.`}
                 </p>
-                <div className="mt-5 flex items-center justify-center gap-3">
-                  {selectedCategory && (
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className="px-5 py-2.5 rounded-2xl bg-sand-100 hover:bg-sand-200 text-forest-900 font-bold text-xs"
-                    >
-                      Clear Category (Show All for {currentAgeObj?.label})
-                    </button>
+
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                  {selectedSubcategory && (
+                    <>
+                      <a
+                        href="https://wa.me/254700000000?text=Hello%20Hikaya!%20I%20am%20looking%20for%20items%20in%20the%20collection"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-soft transition-colors inline-flex items-center gap-2"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        <span>Chat on WhatsApp</span>
+                      </a>
+                      <button
+                        onClick={() => setSelectedSubcategory(null)}
+                        className="px-5 py-2.5 rounded-2xl bg-sand-100 hover:bg-sand-200 text-forest-900 font-bold text-xs transition-colors"
+                      >
+                        Show All in {currentCategoryObj?.name}
+                      </button>
+                    </>
                   )}
                   <button
                     onClick={clearAllFilters}
-                    className="px-6 py-2.5 rounded-2xl bg-terracotta-600 text-white font-bold text-xs shadow-soft"
+                    className="px-6 py-2.5 rounded-2xl bg-terracotta-600 hover:bg-terracotta-700 text-white font-bold text-xs shadow-soft transition-colors"
                   >
                     Reset All Filters
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                   <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {paginatedProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+
+                {/* Peekaboo-Style Pagination / Load More Option */}
+                {filteredProducts.length > visibleCount && (
+                  <div className="mt-12 text-center bg-white rounded-3xl p-6 sm:p-8 border border-sand-200/90 shadow-soft">
+                    <p className="text-xs text-charcoal-muted mb-2 font-medium">
+                      Showing <span className="font-bold text-forest-900">{visibleCount}</span> of <span className="font-bold text-forest-900">{filteredProducts.length}</span> products
+                    </p>
+                    <div className="w-56 h-1.5 bg-sand-200 rounded-full mx-auto mb-5 overflow-hidden">
+                      <div
+                        className="h-full bg-terracotta-600 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, Math.round((visibleCount / filteredProducts.length) * 100))}%` }}
+                      />
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                      <button
+                        onClick={() => setVisibleCount(prev => prev + 12)}
+                        className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-terracotta-600 hover:bg-terracotta-700 text-white font-bold text-xs shadow-soft transition-all active:scale-95 flex items-center justify-center gap-2"
+                      >
+                        <span>Load More Products</span>
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setVisibleCount(filteredProducts.length)}
+                        className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-sand-100 hover:bg-sand-200 text-forest-900 font-semibold text-xs transition-colors"
+                      >
+                        View All ({filteredProducts.length})
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </main>
         </div>
@@ -645,86 +803,91 @@ export default function ShopView() {
             <div className="w-screen max-w-xs bg-cream-50 p-6 flex flex-col justify-between overflow-y-auto">
               <div className="space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-sand-200">
-                  <h3 className="font-bold text-base text-forest-900">Filters & Ages</h3>
+                  <h3 className="font-bold text-base text-forest-900">Filters</h3>
                   <button
                     onClick={() => setMobileFiltersOpen(false)}
-                    className="p-1 rounded-lg text-charcoal-muted hover:text-charcoal"
+                    className="p-1 rounded-xl text-charcoal hover:bg-sand-200"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                {/* Mobile Shop by Age */}
+                {/* Mobile Departments */}
                 <div>
-                  <h4 className="text-xs font-bold text-forest-900 mb-2">👶 Shop by Age</h4>
-                  <div className="space-y-1 text-xs">
-                    <button
-                      onClick={() => { setSelectedAgeGroup(null); setMobileFiltersOpen(false); }}
-                      className={`w-full text-left py-2 px-2.5 rounded-xl font-medium ${
-                        selectedAgeGroup === null ? 'bg-forest-900 text-white font-bold' : 'text-charcoal'
-                      }`}
-                    >
-                      All Ages
-                    </button>
-                    {ageGroups.map(a => (
-                      <button
-                        key={a.id}
-                        onClick={() => { setSelectedAgeGroup(selectedAgeGroup === a.id ? null : a.id); setMobileFiltersOpen(false); }}
-                        className={`w-full text-left py-2 px-2.5 rounded-xl font-medium flex items-center justify-between ${
-                          selectedAgeGroup === a.id ? 'bg-amber-500 text-forest-950 font-bold' : 'text-charcoal'
-                        }`}
-                      >
-                        <span>{a.emoji} {a.label}</span>
-                        <span className="text-[10px] text-charcoal-muted">
-                          {products.filter(p => matchesAgeGroup(p, a.id)).length}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Mobile Categories */}
-                <div className="pt-4 border-t border-sand-200">
-                  <h4 className="text-xs font-bold text-forest-900 mb-2">Category</h4>
-                  <div className="space-y-1 text-xs max-h-60 overflow-y-auto">
-                    <button
-                      onClick={() => { setSelectedCategory(null); setMobileFiltersOpen(false); }}
-                      className={`w-full text-left py-2 px-2.5 rounded-xl font-medium ${
-                        selectedCategory === null ? 'bg-terracotta-600 text-white font-bold' : 'text-charcoal'
-                      }`}
-                    >
-                      All Categories
-                    </button>
-                    {categories.map(c => (
+                  <h4 className="text-xs font-bold text-forest-900 mb-2">Departments</h4>
+                  <div className="space-y-1">
+                    {categories.map((c) => (
                       <button
                         key={c.id}
-                        onClick={() => { setSelectedCategory(selectedCategory === c.id ? null : c.id); setMobileFiltersOpen(false); }}
-                        className={`w-full text-left py-2 px-2.5 rounded-xl font-medium ${
-                          selectedCategory === c.id ? 'bg-terracotta-50 text-terracotta-800 font-bold' : 'text-charcoal'
+                        onClick={() => {
+                          setSelectedCategory(c.id);
+                          setSelectedSubcategory(null);
+                          setMobileFiltersOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between ${
+                          selectedCategory === c.id ? 'bg-terracotta-600 text-white' : 'bg-white text-charcoal'
                         }`}
                       >
-                        {c.emoji} {c.name}
+                        <span>{c.emoji} {c.name}</span>
+                        <span>{getProductsForCategory(products, c.id).length}</span>
                       </button>
                     ))}
                   </div>
                 </div>
+
+                {/* Mobile Subcategories */}
+                {currentCategoryObj && (
+                  <div>
+                    <h4 className="text-xs font-bold text-forest-900 mb-2">Subcategories</h4>
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => { setSelectedSubcategory(null); setMobileFiltersOpen(false); }}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold ${
+                          selectedSubcategory === null ? 'bg-forest-900 text-white' : 'bg-white text-charcoal'
+                        }`}
+                      >
+                        All in {currentCategoryObj.name}
+                      </button>
+                      {currentCategoryObj.subcategories.map((sub) => {
+                        const subName = getSubName(sub);
+                        const subImg = getSubImage(sub);
+                        const subAlt = getSubAlt(sub);
+
+                        return (
+                          <button
+                            key={subName}
+                            onClick={() => {
+                              setSelectedSubcategory(subName);
+                              setMobileFiltersOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-2.5 ${
+                              selectedSubcategory === subName ? 'bg-forest-900 text-white' : 'bg-white text-charcoal'
+                            }`}
+                          >
+                            {subImg && (
+                              <img
+                                src={subImg}
+                                alt={subAlt}
+                                className="w-6 h-6 rounded-md object-cover shrink-0 border border-sand-200"
+                                loading="lazy"
+                              />
+                            )}
+                            <span className="truncate">{subName}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="pt-6 border-t border-sand-200 space-y-2">
+              <div className="pt-6 border-t border-sand-200">
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="w-full py-3 rounded-2xl bg-forest-800 text-white font-bold text-xs shadow-soft"
+                  className="w-full py-3 rounded-2xl bg-terracotta-600 text-white text-xs font-bold shadow-soft"
                 >
                   Apply Filters ({filteredProducts.length} Results)
                 </button>
-                {hasActiveFilters && (
-                  <button
-                    onClick={() => { clearAllFilters(); setMobileFiltersOpen(false); }}
-                    className="w-full py-2.5 rounded-2xl bg-white border border-sand-200 text-charcoal font-bold text-xs"
-                  >
-                    Reset All Filters
-                  </button>
-                )}
               </div>
             </div>
           </div>

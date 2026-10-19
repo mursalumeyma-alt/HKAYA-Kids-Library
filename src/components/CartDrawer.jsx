@@ -209,6 +209,23 @@ export default function CartDrawer() {
                 <ArrowRight className="w-4 h-4" />
               </button>
 
+              {/* Supported Payment Logos */}
+              <div className="pt-1 flex items-center justify-center gap-1.5 opacity-90">
+                <span className="text-[10px] text-charcoal-muted font-medium">Accepted:</span>
+                <div className="bg-[#FFF9F1] rounded px-1.5 py-0.5 border border-sand-200 h-6 flex items-center shadow-2xs">
+                  <img src="/images/reference/payment-mpesa.png" alt="M-PESA" className="h-3.5 object-contain" />
+                </div>
+                <div className="bg-[#FFF9F1] rounded px-1.5 py-0.5 border border-sand-200 h-6 flex items-center shadow-2xs">
+                  <img src="/images/reference/payment-pesapal.png" alt="Pesapal" className="h-3.5 object-contain" />
+                </div>
+                <div className="bg-[#FFF9F1] rounded px-1.5 py-0.5 border border-sand-200 h-6 flex items-center shadow-2xs">
+                  <img src="/images/reference/payment-visa.png" alt="Visa" className="h-3 object-contain" />
+                </div>
+                <div className="bg-[#FFF9F1] rounded px-1.5 py-0.5 border border-sand-200 h-6 flex items-center shadow-2xs">
+                  <img src="/images/reference/payment-mastercard.png" alt="Mastercard" className="h-3 object-contain" />
+                </div>
+              </div>
+
               <button
                 onClick={() => setIsCartOpen(false)}
                 className="w-full text-center text-xs font-semibold text-charcoal-muted hover:text-charcoal pt-1"

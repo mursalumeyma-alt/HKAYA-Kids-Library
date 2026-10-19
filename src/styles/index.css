@@ -4,18 +4,22 @@
 
 @layer base {
   :root {
-    --brand-terracotta: #D97746;
-    --brand-cream: #FAF7F2;
-    --brand-sage: #7B9E84;
-    --brand-forest: #234133;
-    --brand-gold: #C89B3C;
-    --brand-sand: #F4EFEA;
-    --brand-charcoal: #2D2B2A;
+    --brand-primary-orange: #F97316;
+    --brand-deep-orange: #C2410C;
+    --brand-light-orange: #FFEDD5;
+    --brand-warm-cream: #FFF9F1;
+    --brand-dark-text: #292524;
+    --brand-white: #FFFFFF;
+    --whatsapp-green: #25D366;
+
+    --brand-terracotta: #F97316;
+    --brand-cream: #FFF9F1;
+    --brand-charcoal: #292524;
   }
 
   body {
-    background-color: var(--brand-cream);
-    color: var(--brand-charcoal);
+    background-color: var(--brand-warm-cream);
+    color: var(--brand-dark-text);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
@@ -25,34 +29,34 @@
   }
 }
 
-/* Custom smooth scrollbar */
+/* Custom smooth scrollbar with brand orange */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F4EFEA;
+  background: #FFF9F1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #DA8B5A;
+  background: #F97316;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #B8582C;
+  background: #C2410C;
 }
 
 /* Glass and subtle card effects */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 .subtle-ring {
-  box-shadow: 0 0 0 1px rgba(217, 119, 70, 0.12);
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.16);
 }
 
 /* Gentle floating animations for decorative illustrations */

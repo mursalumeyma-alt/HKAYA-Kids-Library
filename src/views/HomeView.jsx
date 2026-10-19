@@ -1,59 +1,33 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import ShopByAge from '../components/ShopByAge';
 import ShopByCategory from '../components/ShopByCategory';
-import NewArrivalsSection from '../components/NewArrivalsSection';
-import BestSellersSection from '../components/BestSellersSection';
-import FeaturedCollections from '../components/FeaturedCollections';
-import CustomerCareSection from '../components/CustomerCareSection';
-import WhyHkaya from '../components/WhyHkaya';
-import LearningStages from '../components/LearningStages';
-import ReadingCorner from '../components/ReadingCorner';
-import CustomerReviews from '../components/CustomerReviews';
-import OrderReadyCTA from '../components/OrderReadyCTA';
-import Newsletter from '../components/Newsletter';
+import AboutHikayaSpotlight from '../components/AboutHikayaSpotlight';
 
+/**
+ * Hikaya Kids Library - Homepage
+ * 
+ * Accurately structured according to the reference homepage mockup:
+ * 1. Hero Section (Hero.jsx)
+ *    - "Welcome to Hikaya Kids Library"
+ *    - "Little Minds. Big Dreams."
+ *    - Supporting copy & "Shop Now →" button
+ *    - Real hero photo of children reading
+ * 2. Shop by Category Section (ShopByCategory.jsx)
+ *    - 7 clean category cards with genuine product photos & orange circular arrow buttons
+ * 3. About Hikaya Spotlight Section (AboutHikayaSpotlight.jsx)
+ *    - 3-part layout: Read/Learn/Grow books photo, About Hikaya story & Learn More button, Better Readers Brighter Futures badge
+ */
 export default function HomeView() {
   return (
     <div className="space-y-0">
-      {/* 1. Hero Section with Prominent Children Reading Visuals */}
+      {/* 1. Hero Section */}
       <Hero />
 
-      {/* 2. Shop by Age Cards (0-2, 3-5, 6-8, 9-12, 13+) */}
-      <ShopByAge />
-
-      {/* 3. Shop by Category Grid (All 11 Categories with dedicated products) */}
+      {/* 2. Shop by Category Grid (7 Main Categories) */}
       <ShopByCategory />
 
-      {/* 4. New Arrivals Showcase */}
-      <NewArrivalsSection />
-
-      {/* 5. Best Sellers Showcase */}
-      <BestSellersSection />
-
-      {/* 6. Featured Editorial Collections (Islamic Learning & Hands-on Discovery) */}
-      <FeaturedCollections />
-
-      {/* 7. Customer Care Section (Secure Payments & Shop With Confidence) */}
-      <CustomerCareSection />
-
-      {/* 8. Why HKAYA Trust Pillars */}
-      <WhyHkaya />
-
-      {/* 9. Quick Learning Stage Discovery Pills */}
-      <LearningStages />
-
-      {/* 10. Reading Corner / Parenting Articles Preview */}
-      <ReadingCorner />
-
-      {/* 11. Customer Reviews (Transparently labeled demo / honest state) */}
-      <CustomerReviews />
-
-      {/* 12. Strong Order-Ready CTA */}
-      <OrderReadyCTA />
-
-      {/* 13. Family Newsletter */}
-      <Newsletter />
+      {/* 3. About Hikaya Spotlight Banner */}
+      <AboutHikayaSpotlight />
     </div>
   );
 }

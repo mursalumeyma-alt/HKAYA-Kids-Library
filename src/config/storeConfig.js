@@ -1,37 +1,99 @@
 /**
  * HKAYA Kids Library - Central Store Configuration
  * 
- * All operational settings, contact placeholders, delivery rules,
- * and payment configs are centralized here so the store owner can
- * easily update them without touching component code.
+ * All operational settings, business contact points, social media profiles,
+ * delivery rules, and payment configurations are centralized here so the
+ * store owner can easily update them in one place.
+ * 
+ * SECURITY NOTICE: Never store M-Pesa PINs, secret passkeys, or private API keys
+ * in this public frontend configuration. Sensitive Daraja credentials belong strictly
+ * in server environment variables (server/.env).
  */
 
 export const STORE_CONFIG = {
   brand: {
-    name: "HKAYA",
+    name: "Hikaya",
     subName: "Kids Library",
     arabicName: "حكاية",
     tagline: "Little minds. Big dreams.",
-    mission: "Hkaya is a warm, trusted children's library and learning store that helps parents discover quality books, Islamic learning resources, educational materials, stationery, toys, and meaningful gifts for children.",
+    mission: "Hikaya is a warm, trusted children's library and learning store that helps parents discover quality books, stationery, school bags, lunch boxes, educational toys, and meaningful gifts for children in Kenya.",
     country: "Kenya",
     currency: "KSh",
-    locationNotes: "Nairobi, Kenya", // General location context only
+    locationNotes: "Nairobi, Kenya", // General location context
     establishedYear: 2026,
   },
 
-  // Central contact points (configurable - clearly labeled placeholders)
+  // Central business contact details
   contacts: {
+    email: {
+      label: "Business Email",
+      address: "hello@hkayalibrary.co.ke",
+      isConfigured: true
+    },
+    phone: {
+      label: "Business Phone",
+      displayNumber: "+254 793 477 288",
+      rawNumber: "+254793477288",
+      isConfigured: true // Set to false to hide phone links when unavailable
+    },
     whatsapp: {
       label: "WhatsApp Support",
-      displayNumber: "Contact number to be configured",
-      targetNumber: "", // Configured by store owner
-      isConfigured: false,
-      helpPrompt: "Hi Hkaya, I would like to inquire about children's books and learning resources."
+      displayNumber: "+254 793 477 288",
+      targetNumber: "254793477288", // Confirmed official WhatsApp number: https://wa.me/254793477288
+      isConfigured: true,
+      helpPrompt: "Assalamu Alaikum! I would like to enquire about products from Hikaya Kids Library."
     },
-    email: {
-      label: "Customer Care",
-      address: "hello@hkayalibrary.co.ke",
-      isConfigured: false
+    supportHours: {
+      label: "Customer Support Hours",
+      days: "Monday – Saturday",
+      hours: "8:30 AM – 6:00 PM EAT",
+      isConfirmed: false // Only displayed if confirmed per store policies
+    }
+  },
+
+  // Social media profiles (Instagram and TikTok)
+  // Social media profiles (Instagram and TikTok)
+  // Official HKAYA Kids Library social accounts
+  social: {
+    instagram: {
+      platform: "Instagram",
+      label: "Follow HKAYA Kids Library on Instagram",
+      tooltip: "Follow us on Instagram",
+      handle: "@hkaya_kids_library",
+      url: "https://www.instagram.com/hkaya_kids_library/",
+      isConfigured: true
+    },
+    tiktok: {
+      platform: "TikTok",
+      label: "Follow HKAYA Kids Library on TikTok",
+      tooltip: "Follow us on TikTok",
+      handle: "@hkaya_kids_library",
+      url: "https://www.tiktok.com/@hkaya_kids_library",
+      isConfigured: true
+    }
+  },
+
+  // Payment configuration (safe frontend display details only)
+  payments: {
+    mpesaPaymentMethod: "Safaricom Daraja STK Push",
+    mpesaTillNumber: null, // Daraja API uses STK Push via Paybill/Till shortcode, not manual till entry
+    mpesaPaybillNumber: null,
+    mpesa: {
+      id: "mpesa",
+      label: "M-Pesa Express (Safaricom Daraja API)",
+      mpesaPaymentMethod: "Safaricom Daraja STK Push",
+      description: "Official Safaricom Daraja STK Push integration. PIN entered securely on your phone's official Safaricom prompt.",
+      enabled: true,
+      isSimulation: false,
+      badgeText: "Safaricom Daraja"
+    },
+    card: {
+      id: "card",
+      label: "Credit / Debit Card",
+      description: "PCI-compliant tokenized payment gateway. HKAYA never stores raw card credentials.",
+      enabled: true,
+      isSimulation: false,
+      badgeText: "PCI Tokenized"
     }
   },
 
@@ -56,26 +118,6 @@ export const STORE_CONFIG = {
     dispatchNotice: "Orders are prepared with care and dispatched across East Africa."
   },
 
-  // Payment methods & simulation flags
-  payments: {
-    mpesa: {
-      id: "mpesa",
-      label: "M-Pesa Express (Safaricom Daraja API)",
-      description: "Official Safaricom Daraja STK Push integration. PIN entered securely on your phone's official Safaricom prompt.",
-      enabled: true,
-      isSimulation: false,
-      badgeText: "Safaricom Daraja"
-    },
-    card: {
-      id: "card",
-      label: "Credit / Debit Card",
-      description: "PCI-compliant tokenized payment gateway. HKAYA never stores raw card credentials.",
-      enabled: true,
-      isSimulation: false,
-      badgeText: "PCI Tokenized"
-    }
-  },
-
   // Newsletter settings (configurable - discount disabled by default)
   newsletter: {
     title: "Join the Hkaya Family",
@@ -91,7 +133,14 @@ export const STORE_CONFIG = {
 
   // Environment notice
   prototype: {
-    isDemo: true,
+    isDemo: false,
     bannerText: "Production Architecture Active — Secure backend server, SQLite database, and Safaricom Daraja API connected (Sandbox/Setup Mode)."
   }
 };
+
+// Convenience helpers & placeholders for social and contact URLs
+export const whatsappNumber = STORE_CONFIG.contacts.whatsapp.targetNumber;
+export const whatsappUrl = `https://wa.me/${STORE_CONFIG.contacts.whatsapp.targetNumber}?text=${encodeURIComponent(STORE_CONFIG.contacts.whatsapp.helpPrompt)}`;
+export const instagramUrl = STORE_CONFIG.social.instagram.url;
+export const tiktokUrl = STORE_CONFIG.social.tiktok.url;
+
