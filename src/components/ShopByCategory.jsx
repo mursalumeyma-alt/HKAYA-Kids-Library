@@ -44,6 +44,12 @@ const CATEGORY_CARDS = [
     name: 'Reading & Learning Accessories',
     image: '/images/reference/cat-prod-reading-acc.png',
     alt: 'Adjustable reading stands and study accessories'
+  },
+  {
+    id: 'smart-watch',
+    name: 'Smart Watch',
+    image: '/images/reference/cat-prod-smart-watch.png',
+    alt: "Children's 4G GPS, safety and learning smart watches"
   }
 ];
 
@@ -58,8 +64,8 @@ export default function ShopByCategory() {
     <section id="shop-by-category" className="py-6 sm:py-10 bg-[#FCF4E8]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* 7 Horizontal Category Cards matching reference mockup */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3 lg:gap-3.5">
+        {/* Horizontal Category Cards matching reference mockup */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-3 sm:gap-3 lg:gap-3.5">
           {CATEGORY_CARDS.map((cat) => (
             <div
               key={cat.id}

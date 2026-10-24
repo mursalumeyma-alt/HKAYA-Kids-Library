@@ -2365,6 +2365,557 @@ export const PRODUCTS = [
     ],
     "isDigital": false,
     "active": 1
+  },
+  {
+    "id": "hk-sw-01",
+    "name": "Hikaya SafeTrack 4G GPS Kids Smart Watch",
+    "slug": "hikaya-safetrack-4g-gps-kids-smart-watch",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Kids' Smart Watches",
+    "price": 3850,
+    "compareAtPrice": 4500,
+    "stock": 28,
+    "images": [
+      "/images/categories/sub-kids-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Keep your child safe, reachable, and connected anywhere in Kenya with the Hikaya SafeTrack 4G GPS Smart Watch. Engineered with precise real-time GPS/LBS/Wi-Fi positioning, two-way HD video and voice calling, an instant one-touch SOS emergency calling button, and customizable safe-zone geofencing alerts for home and school. Fully compatible with Safaricom and Airtel Kenya 4G micro-SIM cards.",
+    "shortDescription": "4G GPS tracking smartwatch with real-time location, two-way HD video/voice calling, SOS emergency button, and Safaricom/Airtel SIM compatibility.",
+    "ageRange": "5–12 Years",
+    "ageMin": 5,
+    "ageMax": 12,
+    "ageGroupId": "6-8",
+    "featured": true,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Encourages independence while keeping parents connected and reassured",
+      "Instills emergency awareness and safe communication habits",
+      "Teaches time management and punctuality with digital/analog watch faces"
+    ],
+    "sizeAndDesign": "Adjustable soft silicone strap. Available in Ocean Blue and Berry Pink.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-02",
+    "name": "Hikaya Little Believer Islamic & Prayer Smart Watch",
+    "slug": "hikaya-little-believer-islamic-prayer-smart-watch",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Educational Smart Watches for Children",
+    "price": 3400,
+    "compareAtPrice": 4000,
+    "stock": 24,
+    "images": [
+      "/images/categories/sub-educational-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "An inspiring Islamic smart watch crafted specially for Muslim children. Automatically notifies young believers of Salah prayer times with gentle adhan tones, includes a digital Qibla compass for East Africa, daily morning and evening Azkar with audio recitations, and interactive good deed trackers to encourage daily sunnah habits.",
+    "shortDescription": "Salah prayer time notifications, digital Qibla compass, daily Azkar audio, and good deed habit tracker for kids.",
+    "ageRange": "6–14 Years",
+    "ageMin": 6,
+    "ageMax": 14,
+    "ageGroupId": "9-12",
+    "featured": true,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Builds lifelong love and routine for punctual five daily prayers",
+      "Aids daily memorization of essential morning and evening Azkar",
+      "Fosters Islamic identity and pride in personal faith practices"
+    ],
+    "sizeAndDesign": "Matte emerald green & gold finish with hypoallergenic breathable band.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-03",
+    "name": "Children's Interactive Educational Math & Learning Watch",
+    "slug": "childrens-interactive-educational-math-learning-watch",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Educational Smart Watches for Children",
+    "price": 2750,
+    "compareAtPrice": 3200,
+    "stock": 32,
+    "images": [
+      "/images/categories/sub-educational-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "A vibrant, durable touchscreen smart watch packed with educational learning entertainment. Includes dual HD selfie and environment cameras, audio voice recorder for speech and recitation practice, educational mental math puzzle games, stopwatch, calculator, and IP67 splash-resistant design ready for school.",
+    "shortDescription": "Interactive learning watch with mental math puzzles, dual cameras, audio recorder, and time habit tools.",
+    "ageRange": "4–10 Years",
+    "ageMin": 4,
+    "ageMax": 10,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Strengthens mental arithmetic through engaging timed math quizzes",
+      "Sparks creativity with voice recording and photography journaling",
+      "Develops fine motor coordination with responsive touch navigation"
+    ],
+    "sizeAndDesign": "Reinforced shockproof rubber bumper casing with high-contrast IPS screen.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-04",
+    "name": "Hikaya Junior Explorer Fitness & Habit Smart Watch",
+    "slug": "hikaya-junior-explorer-fitness-habit-smart-watch",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Fitness Bands",
+    "price": 2200,
+    "compareAtPrice": 2600,
+    "stock": 35,
+    "images": [
+      "/images/categories/sub-fitness-bands.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Help children develop active lifestyles and organized study routines. Features a bright OLED screen, daily step and activity counter, sleep quality monitor, hydration reminders, and up to 10 customizable silent vibrating alarms for waking up, homework time, and bedtime.",
+    "shortDescription": "Child activity tracker with daily step counter, hydration reminders, silent vibrating alarms, and 7-day battery.",
+    "ageRange": "5–14 Years",
+    "ageMin": 5,
+    "ageMax": 14,
+    "ageGroupId": "6-8",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Encourages active physical movement and daily outdoor play goals",
+      "Establishes self-regulated homework, reading, and bedtime routines",
+      "Promotes healthy hydration habits throughout school hours"
+    ],
+    "sizeAndDesign": "Ultra-lightweight 18g slim band with magnetic quick-charge cable.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-05",
+    "name": "Kids' Dual Camera Colorful Touchscreen Smart Watch",
+    "slug": "kids-dual-camera-colorful-touchscreen-smart-watch",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Kids' Smart Watches",
+    "price": 2800,
+    "compareAtPrice": 3300,
+    "stock": 30,
+    "images": [
+      "/images/categories/sub-kids-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Designed especially for young boys and girls, this colorful smart watch features dual front and top cameras, fun photo stickers, video recorder, music player with built-in speaker, torch flashlight, and parent-controlled school mode.",
+    "shortDescription": "Vibrant children's smart watch with dual cameras, torch light, music player, and parent school-time controls.",
+    "ageRange": "4–11 Years",
+    "ageMin": 4,
+    "ageMax": 11,
+    "ageGroupId": "3-5",
+    "featured": true,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Sparks photographic curiosity and storytelling",
+      "Helps children tell time using customizable analog and digital watch faces"
+    ],
+    "sizeAndDesign": "Two-tone soft breathable silicone strap in Sky Cyan and Sunrise Coral.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-06",
+    "name": "4G Cellular Kids Smart Watch with HD Voice & Video Calling",
+    "slug": "4g-cellular-kids-smart-watch-hd-voice-video-calling",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watches with Calling and SIM Support",
+    "price": 3600,
+    "compareAtPrice": 4200,
+    "stock": 26,
+    "images": [
+      "/images/categories/sub-smart-watches-calling-sim.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Stay reachable at all times without giving your child an unrestricted smartphone. Accepts standard nano-SIM cards on Safaricom, Airtel, and Telkom networks for crisp two-way voice calls, HD video chat, family group voice messaging, and incoming call whitelisting to block unknown callers.",
+    "shortDescription": "Dedicated calling smart watch with nano-SIM support, two-way HD calling, and spam call blocker.",
+    "ageRange": "5–13 Years",
+    "ageMin": 5,
+    "ageMax": 13,
+    "ageGroupId": "6-8",
+    "featured": true,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Provides safe parent communication without open internet risks",
+      "Builds vocal communication confidence"
+    ],
+    "sizeAndDesign": "Splash-resistant casing with reinforced SIM tray lock.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-07",
+    "name": "Hikaya Guardian Real-Time GPS Tracking Smart Watch with SOS",
+    "slug": "hikaya-guardian-real-time-gps-tracking-smart-watch-sos",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watches with GPS Tracking",
+    "price": 3950,
+    "compareAtPrice": 4600,
+    "stock": 25,
+    "images": [
+      "/images/categories/sub-smart-watches-gps.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Maximum safety and peace of mind for families in Mombasa, Nairobi, and across Kenya. Utilizes satellite GPS, cell tower LBS, and Wi-Fi networks to pinpoint your child's location on your phone app. Features 30-day historical route tracking, electronic school fence boundary alerts, and an emergency SOS button.",
+    "shortDescription": "Precision GPS tracker watch with satellite positioning, boundary geofencing, and historical route playback.",
+    "ageRange": "5–14 Years",
+    "ageMin": 5,
+    "ageMax": 14,
+    "ageGroupId": "6-8",
+    "featured": true,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Reassures parents during school commutes and family outings",
+      "Empowers children with emergency help protocols"
+    ],
+    "sizeAndDesign": "High-durability casing with reinforced magnetic pin charging.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-08",
+    "name": "Classic Bluetooth Calling Smart Watch with AMOLED HD Display",
+    "slug": "classic-bluetooth-calling-smart-watch-amoled-hd-display",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Adult Smart Watches",
+    "price": 4200,
+    "compareAtPrice": 4900,
+    "stock": 20,
+    "images": [
+      "/images/categories/sub-adult-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "A stylish, versatile adult smart watch combining premium looks with everyday convenience. Features a vibrant 1.43-inch AMOLED display with Always-On screen, crystal-clear Bluetooth phone calls, message notifications for WhatsApp/SMS, 100+ sport tracking modes, heart rate and blood oxygen monitoring.",
+    "shortDescription": "Premium adult smart watch with AMOLED screen, Bluetooth phone calling, WhatsApp alerts, and fitness tracking.",
+    "ageRange": "13+ Years",
+    "ageMin": 13,
+    "ageMax": 99,
+    "ageGroupId": "13+",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Supports healthy lifestyle tracking and efficient daily schedule management"
+    ],
+    "sizeAndDesign": "Zinc alloy metallic frame with quick-release 22mm black strap.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-09",
+    "name": "Elegance Health & Notification Smart Watch for Men & Women",
+    "slug": "elegance-health-notification-smart-watch-men-women",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Adult Smart Watches",
+    "price": 3650,
+    "compareAtPrice": 4200,
+    "stock": 22,
+    "images": [
+      "/images/categories/sub-adult-smart-watches.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Slim, lightweight smart watch with a curved glass aesthetic. Tracks daily steps, calories, sleep stages, menstrual health reminders, and displays real-time weather and smartphone notifications. Up to 10 days battery life on a single charge.",
+    "shortDescription": "Slim unisex everyday smart watch with curved glass, 10-day battery, and comprehensive health monitoring.",
+    "ageRange": "13+ Years",
+    "ageMin": 13,
+    "ageMax": 99,
+    "ageGroupId": "13+",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Encourages holistic wellness, restful sleep tracking, and active habits"
+    ],
+    "sizeAndDesign": "Rose Gold & Midnight Black minimalist bezels.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-10",
+    "name": "PulseTrack Slim Waterproof Fitness Band & Activity Tracker",
+    "slug": "pulsetrack-slim-waterproof-fitness-band-activity-tracker",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Fitness Bands",
+    "price": 1950,
+    "compareAtPrice": 2400,
+    "stock": 38,
+    "images": [
+      "/images/categories/sub-fitness-bands.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Ergonomic slim fitness wristband built for sports, running, walking, and daily activity. Monitors heart rate 24/7, tracks distance and calories burned, features IP68 water resistance for swimming and rainy days, and provides vibrating alarm and incoming call alerts.",
+    "shortDescription": "Slim fitness tracker with 24/7 heart rate monitor, step counter, IP68 water resistance, and 14-day battery.",
+    "ageRange": "8–99 Years",
+    "ageMin": 8,
+    "ageMax": 99,
+    "ageGroupId": "9-12",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Builds consistent fitness stamina and conscious daily physical activity"
+    ],
+    "sizeAndDesign": "Snug snap-on silicone band in Stealth Black and Deep Blue.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-11",
+    "name": "Universal Soft Silicone Smart Watch Replacement Straps (Pack of 3)",
+    "slug": "universal-soft-silicone-smart-watch-replacement-straps-pack-of-3",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Replacement Straps",
+    "price": 850,
+    "compareAtPrice": 1100,
+    "stock": 45,
+    "images": [
+      "/images/categories/sub-replacement-straps.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Refresh the look of your child's or adult smart watch with this value pack of 3 soft silicone replacement straps. Hypoallergenic, skin-friendly, sweat-proof, and washable. Equipped with quick-release spring bars for tool-free installation in seconds. Fits standard 16mm/18mm/20mm smart watch lugs.",
+    "shortDescription": "Set of 3 quick-release soft silicone replacement straps in vibrant mix colors. Tool-free installation.",
+    "ageRange": "All Ages",
+    "ageMin": 3,
+    "ageMax": 99,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Extends the lifespan and hygiene of children's daily wearable devices"
+    ],
+    "sizeAndDesign": "Trio Pack: Ocean Blue, Coral Red, and Onyx Black with stainless steel buckles.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-12",
+    "name": "Breathable Sport Nylon Loop Replacement Strap for Smart Watches",
+    "slug": "breathable-sport-nylon-loop-replacement-strap-smart-watches",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Replacement Straps",
+    "price": 650,
+    "compareAtPrice": 850,
+    "stock": 40,
+    "images": [
+      "/images/categories/sub-replacement-straps.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Ultra-soft and breathable woven nylon sport loop band with hook-and-loop velcro fastener for easy, infinitely adjustable micro-sizing. Perfect for active kids and sports enthusiasts who need maximum wrist comfort without sweaty skin irritation.",
+    "shortDescription": "Breathable woven nylon sport band with hook-and-loop closure for soft all-day comfort.",
+    "ageRange": "All Ages",
+    "ageMin": 4,
+    "ageMax": 99,
+    "ageGroupId": "6-8",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Provides comfortable, irritation-free wear for sensitive young skin"
+    ],
+    "sizeAndDesign": "Rainbow Stripe, Army Green, and Classic Charcoal.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-13",
+    "name": "Tempered Glass Smart Watch Screen Protectors (Pack of 2)",
+    "slug": "tempered-glass-smart-watch-screen-protectors-pack-of-2",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Screen Protectors",
+    "price": 450,
+    "compareAtPrice": 600,
+    "stock": 50,
+    "images": [
+      "/images/categories/sub-screen-protectors.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Shield your smart watch display from playground drops, classroom scratches, and accidental knocks. 9H hardness real tempered glass provides 99.9% HD transparency, touch sensitivity, and oleophobic coating to resist finger smudges. Includes installation cleaning wipes.",
+    "shortDescription": "9H hardness tempered glass protector pack of 2 with scratch-proof shield and HD clarity.",
+    "ageRange": "All Ages",
+    "ageMin": 3,
+    "ageMax": 99,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Teaches responsibility and care for valuable learning technology"
+    ],
+    "sizeAndDesign": "Available in 38mm, 40mm, 42mm, and 44mm round & square sizes.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-14",
+    "name": "Full Coverage HD Flexible TPU Screen Protector for Kids Smart Watches (Pack of 3)",
+    "slug": "full-coverage-hd-flexible-tpu-screen-protector-kids-smart-watches-pack-of-3",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Screen Protectors",
+    "price": 400,
+    "compareAtPrice": 550,
+    "stock": 45,
+    "images": [
+      "/images/categories/sub-screen-protectors.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Self-healing military-grade flexible TPU protective film that wraps seamlessly around curved screen edges. Shock-absorbing hydrogel material guards against impact cracks and everyday scuffs while preserving seamless touchscreen responsiveness.",
+    "shortDescription": "3-pack curved edge flexible TPU screen protectors with self-healing anti-scratch shield.",
+    "ageRange": "All Ages",
+    "ageMin": 3,
+    "ageMax": 99,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Protects family electronic devices from accidental drops during play"
+    ],
+    "sizeAndDesign": "Full edge-to-edge bubble-free adhesive films.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-15",
+    "name": "Universal 2-Pin Magnetic USB Smart Watch Charging Cable",
+    "slug": "universal-2-pin-magnetic-usb-smart-watch-charging-cable",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Charging Cables and Chargers",
+    "price": 550,
+    "compareAtPrice": 750,
+    "stock": 40,
+    "images": [
+      "/images/categories/sub-charging-cables.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Replacement or backup magnetic USB charger cable compatible with most children's GPS smart watches, touch watches, and fitness trackers. Strong magnetic snap-on pins ensure firm, stable contact with built-in short-circuit protection and safe heat dissipation. 1-meter cable length.",
+    "shortDescription": "Strong magnetic 2-pin USB charging cable with short-circuit protection and 1m length.",
+    "ageRange": "All Ages",
+    "ageMin": 3,
+    "ageMax": 99,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Teaches children to manage daily recharging routines independently"
+    ],
+    "sizeAndDesign": "Standard 7.62mm and 4mm pin spacing magnetic connectors.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-16",
+    "name": "Fast Magnetic Smart Watch Charging Dock & Desktop Stand",
+    "slug": "fast-magnetic-smart-watch-charging-dock-desktop-stand",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Charging Cables and Chargers",
+    "price": 850,
+    "compareAtPrice": 1150,
+    "stock": 30,
+    "images": [
+      "/images/categories/sub-charging-cables.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Keep bedside tables and study desks tidy with this angled desktop charging dock. Holds the smart watch securely at an optimal viewing angle while charging, doubling as a bedside desk clock. Weighted non-slip silicone base prevents tipping over.",
+    "shortDescription": "Angled desktop charging dock with weighted non-slip base and magnetic connection.",
+    "ageRange": "All Ages",
+    "ageMin": 4,
+    "ageMax": 99,
+    "ageGroupId": "6-8",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Promotes clean desk organization and nightly habit building"
+    ],
+    "sizeAndDesign": "Sleek matte black finish with anti-skid rubber base.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-17",
+    "name": "All-Around Shockproof Silicone Bumper Case for Smart Watches",
+    "slug": "all-around-shockproof-silicone-bumper-case-smart-watches",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Protective Cases",
+    "price": 450,
+    "compareAtPrice": 600,
+    "stock": 42,
+    "images": [
+      "/images/categories/sub-protective-cases.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Flexible, high-grade silicone bumper protective case designed to absorb direct corner impacts and protect side buttons. Precise cutouts allow instant access to speakers, mic, and charging ports without removing the cover. Easy to wash and clean.",
+    "shortDescription": "Flexible shock-absorbing silicone bumper case with precision cutouts for all ports.",
+    "ageRange": "All Ages",
+    "ageMin": 3,
+    "ageMax": 99,
+    "ageGroupId": "3-5",
+    "featured": false,
+    "bestSeller": true,
+    "newArrival": true,
+    "learningBenefits": [
+      "Protects devices during active school sports and playground activities"
+    ],
+    "sizeAndDesign": "Translucent Clear, Midnight Black, and Pastel Mint.",
+    "isDigital": false,
+    "active": 1
+  },
+  {
+    "id": "hk-sw-18",
+    "name": "Rugged Armor Hard PC Protective Case with Built-in Screen Shield",
+    "slug": "rugged-armor-hard-pc-protective-case-built-in-screen-shield",
+    "category": "smart-watch",
+    "categoryLabel": "Smart Watch",
+    "subcategory": "Smart Watch Protective Cases",
+    "price": 600,
+    "compareAtPrice": 800,
+    "stock": 35,
+    "images": [
+      "/images/categories/sub-protective-cases.jpg",
+      "/images/categories/smart-watch.jpg"
+    ],
+    "description": "Dual-layer heavy-duty protection featuring a tough polycarbonate frame integrated with a crystal-clear 9H tempered glass screen shield. Provides 360-degree all-around drop protection against hard floor impacts, gravel, and rough outdoor adventures.",
+    "shortDescription": "360-degree hard PC armor case with integrated tempered glass screen protector.",
+    "ageRange": "All Ages",
+    "ageMin": 4,
+    "ageMax": 99,
+    "ageGroupId": "6-8",
+    "featured": false,
+    "bestSeller": false,
+    "newArrival": true,
+    "learningBenefits": [
+      "Ensures maximum device durability for adventurous children"
+    ],
+    "sizeAndDesign": "Matte Armor Black and Titanium Silver snap-on case.",
+    "isDigital": false,
+    "active": 1
   }
 ];
 

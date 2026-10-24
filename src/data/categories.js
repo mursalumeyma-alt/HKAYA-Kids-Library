@@ -425,6 +425,91 @@ export const CATEGORIES = [
         alt: "Step-by-step visual Salah prayer and Wudu practice guides"
       }
     ]
+  },
+  {
+    id: "smart-watch",
+    name: "Smart Watch",
+    slug: "smart-watch",
+    arabic: "ساعات ذكية وإكسسواراتها",
+    icon: "Watch",
+    emoji: "⌚",
+    tagline: "Kids' Smart Watches, Fitness Bands, Straps & Accessories",
+    description: "Explore our complete smart watch collection: child-friendly 4G GPS and calling watches, educational learning watches, adult smart watches, fitness bands, and authentic accessories including straps, screen protectors, chargers, and protective cases.",
+    image: "/images/categories/smart-watch.jpg",
+    bgColor: "bg-cyan-50",
+    accentColor: "text-cyan-800",
+    subcategories: [
+      {
+        name: "Kids' Smart Watches",
+        slug: "kids-smart-watches",
+        description: "Colorful, durable smart watches designed especially for children with safety and entertainment features",
+        image: "/images/categories/sub-kids-smart-watches.jpg",
+        alt: "Colorful kids smart watches designed for children"
+      },
+      {
+        name: "Educational Smart Watches for Children",
+        slug: "educational-smart-watches",
+        description: "Interactive smart watches packed with educational learning games, math puzzles, time management and daily habits",
+        image: "/images/categories/sub-educational-smart-watches.jpg",
+        alt: "Educational smart watches for children with learning games"
+      },
+      {
+        name: "Smart Watches with Calling and SIM Support",
+        slug: "smart-watches-calling-sim",
+        description: "Cellular 4G smart watches with SIM card slots for clear two-way HD voice and video calling across Kenya",
+        image: "/images/categories/sub-smart-watches-calling-sim.jpg",
+        alt: "Smart watches with calling and SIM card support"
+      },
+      {
+        name: "Smart Watches with GPS Tracking",
+        slug: "smart-watches-gps-tracking",
+        description: "Real-time location-tracking smart watches with GPS geofencing, route history, and instant SOS alerts",
+        image: "/images/categories/sub-smart-watches-gps.jpg",
+        alt: "Smart watches with real-time GPS location tracking"
+      },
+      {
+        name: "Adult Smart Watches",
+        slug: "adult-smart-watches",
+        description: "Stylish, modern smart watches for everyday productivity, health monitoring, calls, and notifications",
+        image: "/images/categories/sub-adult-smart-watches.jpg",
+        alt: "Stylish adult smart watches for everyday use"
+      },
+      {
+        name: "Fitness Bands",
+        slug: "fitness-bands",
+        description: "Slim, lightweight fitness wristbands for tracking daily steps, workouts, heart rate, and sleep quality",
+        image: "/images/categories/sub-fitness-bands.jpg",
+        alt: "Fitness bands and activity tracker wristbands"
+      },
+      {
+        name: "Smart Watch Replacement Straps",
+        slug: "smart-watch-replacement-straps",
+        description: "Comfortable silicone, sport nylon, and Milanese metal replacement bands in various colors and sizes",
+        image: "/images/categories/sub-replacement-straps.jpg",
+        alt: "Smart watch replacement straps in various colors and materials"
+      },
+      {
+        name: "Smart Watch Screen Protectors",
+        slug: "smart-watch-screen-protectors",
+        description: "Ultra-clear tempered glass and flexible scratch-resistant protective films for smart watch screens",
+        image: "/images/categories/sub-screen-protectors.jpg",
+        alt: "Smart watch tempered glass and protective screen protectors"
+      },
+      {
+        name: "Smart Watch Charging Cables and Chargers",
+        slug: "smart-watch-charging-cables-chargers",
+        description: "Compatible magnetic 2-pin/4-pin USB charging cables, fast-charging cords, and magnetic charging stands",
+        image: "/images/categories/sub-charging-cables.jpg",
+        alt: "Smart watch USB magnetic charging cables and chargers"
+      },
+      {
+        name: "Smart Watch Protective Cases",
+        slug: "smart-watch-protective-cases",
+        description: "All-around shockproof silicone bumpers and rugged protective covers in various colors and finishes",
+        image: "/images/categories/sub-protective-cases.jpg",
+        alt: "Smart watch protective bumper cases and covers"
+      }
+    ]
   }
 ];
 
@@ -441,7 +526,13 @@ export const CATEGORY_ALIASES = {
   'toys': 'educational-toys',
   'gifts-accessories': 'gifts-accessories',
   'gifts': 'gifts-accessories',
-  'islamic-learning': 'islamic-learning'
+  'islamic-learning': 'islamic-learning',
+  'smart-watch': 'smart-watch',
+  'smart-watches': 'smart-watch',
+  'smartwatch': 'smart-watch',
+  'smartwatches': 'smart-watch',
+  'watches': 'smart-watch',
+  'watch': 'smart-watch'
 };
 
 export const AGE_GROUPS = [
@@ -553,7 +644,14 @@ export function getProductsForCategory(products, categoryId) {
         p.name.toLowerCase().includes('ramadan') ||
         p.name.toLowerCase().includes('muslim')
       );
-      return isDirect || isIslamicBook || isIslamicToy || isIslamicGift;
+      const isIslamicWatch = p.category === 'smart-watch' && (
+        p.name.toLowerCase().includes('islamic') ||
+        p.name.toLowerCase().includes('prayer') ||
+        p.name.toLowerCase().includes('azkar') ||
+        p.name.toLowerCase().includes('quran') ||
+        p.name.toLowerCase().includes('believer')
+      );
+      return isDirect || isIslamicBook || isIslamicToy || isIslamicGift || isIslamicWatch;
     }
 
     const itemCat = CATEGORY_ALIASES[p.category] || p.category;
@@ -639,7 +737,18 @@ export function matchesSubcategory(product, subcategoryInput) {
     "daily duas & hadith cards": ['dua', 'hadith', 'cards'],
     "islamic manners & character books": ['manners', 'habits', 'merciful', 'character'],
     "ramadan & eid learning kits": ['ramadan', 'calendar', 'deed', 'eid'],
-    "prayer & wudu practice guides": ['starter kit', 'prayer', 'wudu', 'workbook']
+    "prayer & wudu practice guides": ['starter kit', 'prayer', 'wudu', 'workbook'],
+
+    "kids' smart watches": ['kids smart watch', 'children watch', 'safetrack', 'junior watch', 'child watch', 'colorful watch', 'dual camera'],
+    "educational smart watches for children": ['educational', 'learning watch', 'puzzle', 'math', 'believer', 'islamic watch', 'quiz', 'game'],
+    "smart watches with calling and sim support": ['calling', 'sim', 'cellular', 'voice call', 'video call', 'safaricom', 'airtel', 'call'],
+    "smart watches with gps tracking": ['gps', 'tracking', 'location', 'geofence', 'sos', 'safetrack', 'guardian'],
+    "adult smart watches": ['adult', 'elegance', 'classic', 'bluetooth calling', 'amoled', 'men', 'women'],
+    "fitness bands": ['fitness', 'band', 'wristband', 'activity tracker', 'heart rate', 'step counter', 'pulsetrack'],
+    "smart watch replacement straps": ['strap', 'straps', 'band', 'silicone strap', 'nylon loop', 'replacement strap'],
+    "smart watch screen protectors": ['screen protector', 'tempered glass', 'protective film', 'protector', 'film'],
+    "smart watch charging cables and chargers": ['charging cable', 'charger', 'dock', 'magnetic cable', 'usb charger', 'charging'],
+    "smart watch protective cases": ['case', 'bumper', 'protective case', 'cover', 'armor', 'shockproof case']
   };
 
   const keywords = map[target];

@@ -383,6 +383,77 @@ export default function ShopView() {
           })}
         </div>
 
+        {/* Dedicated 10 Collections Grid for Smart Watch */}
+        {currentCategoryObj?.id === 'smart-watch' && currentCategoryObj.subcategories && (
+          <div className="mb-8 p-4 sm:p-6 bg-white rounded-3xl border border-sand-200/90 shadow-soft">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-sand-200/70">
+              <div>
+                <h2 className="text-base sm:text-lg font-display font-bold text-forest-900 flex items-center gap-2">
+                  <span>⌚</span>
+                  <span>Explore Smart Watch Collections</span>
+                </h2>
+                <p className="text-xs text-charcoal-muted mt-0.5">
+                  Browse our 10 specialized smart watch collections and accessories. Click any collection below to filter products.
+                </p>
+              </div>
+              {selectedSubcategory && (
+                <button
+                  onClick={() => setSelectedSubcategory(null)}
+                  className="self-start sm:self-auto text-xs font-bold text-terracotta-600 hover:text-terracotta-800 transition-colors inline-flex items-center gap-1"
+                >
+                  <span>View All Smart Watches ({getProductsForCategory(products, 'smart-watch').length})</span>
+                  <span>→</span>
+                </button>
+              )}
+            </div>
+
+            {/* 10 Collections Responsive Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {currentCategoryObj.subcategories.map((sub) => {
+                const subName = getSubName(sub);
+                const subImg = getSubImage(sub);
+                const subAlt = getSubAlt(sub);
+                const isSelected = selectedSubcategory === subName;
+                const subCount = getProductsForCategory(products, 'smart-watch').filter(p => matchesSubcategory(p, subName)).length;
+
+                return (
+                  <button
+                    key={subName}
+                    onClick={() => setSelectedSubcategory(isSelected ? null : subName)}
+                    className={`group flex flex-col p-2.5 rounded-2xl border text-left transition-all ${
+                      isSelected
+                        ? 'bg-terracotta-50/90 border-terracotta-500 shadow-sm ring-2 ring-terracotta-400'
+                        : 'bg-sand-50/60 hover:bg-white border-sand-200/80 hover:border-terracotta-300 hover:shadow-xs'
+                    }`}
+                    title={`Browse ${subName}`}
+                  >
+                    <div className="aspect-[4/3] w-full rounded-xl overflow-hidden bg-sand-100 mb-2 relative">
+                      <img
+                        src={subImg}
+                        alt={subAlt}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      {subCount > 0 && (
+                        <span className={`absolute top-1.5 right-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold backdrop-blur-xs ${
+                          isSelected ? 'bg-terracotta-700 text-white' : 'bg-forest-900/85 text-white'
+                        }`}>
+                          {subCount} items
+                        </span>
+                      )}
+                    </div>
+                    <span className={`text-xs font-bold leading-snug line-clamp-2 ${
+                      isSelected ? 'text-terracotta-800' : 'text-forest-900 group-hover:text-terracotta-700'
+                    }`}>
+                      {subName}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Top Search & Sorting Toolbar */}
         <div className="bg-white p-4 rounded-3xl border border-sand-200 shadow-soft mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="relative w-full md:w-96">

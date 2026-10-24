@@ -9,6 +9,7 @@ import {
   Puzzle,
   Gift,
   Compass,
+  Watch,
   ArrowRight,
   Search,
   Sparkles,
@@ -23,7 +24,8 @@ const iconMap = {
   Utensils,
   Puzzle,
   Gift,
-  Compass
+  Compass,
+  Watch
 };
 
 export default function CategoriesView() {
